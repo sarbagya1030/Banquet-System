@@ -33,10 +33,10 @@
                 @endforeach
             </div>
         </div>
+        
 
 
-
-        <div id="profileDialog" class="fixed top-0 right-0 h-full w-1/3 bg-white shadow-md transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-scroll">
+        <div id="profileDialog" class="fixed top-0 right-0 h-full w-80 bg-white shadow-md transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-scroll">
             <div class="p-4">
                 <div class="mt-4 max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
                     <div class="flex items-center justify-between mb-4">
@@ -46,7 +46,7 @@
                                 <h1 class="text-2xl font-semibold">{{$data->firstname}}</</h1>
                             </div>
                         </div>
-                        <a href="profile" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">
+                        <a href="profile" class="px-2 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">
                             Edit Profile
                         </a>
                     </div>
@@ -60,41 +60,43 @@
                         <h2 class="text-lg font-semibold">Contact Information</h2>
                         <ul class="list-disc list-inside text-gray-700">
                             <li>Email: {{$data->email}}</li>
+                            <li>Contact Number: {{$data->email}}</li>
                         </ul>
                     </div>
                 </div>
-                <button id="closeProfile" class="bg-blue-600 text-white py-2 px-4 mt-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-red-300">
+                <button id="closeProfile" class="bg-blue-500 text-white py-2 px-4 mt-6 ml-16 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-red-300">
                     Close Profile
                 </button>
             </div>
 
-
-            <style>
-                /* Styles for the profile dialog container */
-                #profileDialog {
-                        z-index: 9999; /* Ensure it appears above other content */
-                                }
-
-                /* Initial position of the profile dialog */
-                .translate-x-full {
-                        transform: translateX(100%);
-                                }
-            </style>
+           
 
 
-        
+<style>
+    /* Styles for the profile dialog container */
+    #profileDialog {
+            z-index: 9999; /* Ensure it appears above other content */
+                    }
 
-    <script>
-        // Function to open the profile dialog
+    /* Initial position of the profile dialog */
+    .translate-x-full {
+            transform: translateX(100%);
+                    }
+</style>
+
+
+
+<script>
+    // Function to open the profile dialog
 function openProfile() {
-    const profileDialog = document.getElementById("profileDialog");
-    profileDialog.classList.remove("translate-x-full");
+const profileDialog = document.getElementById("profileDialog");
+profileDialog.classList.remove("translate-x-full");
 }
 
 // Function to close the profile dialog
 function closeProfile() {
-    const profileDialog = document.getElementById("profileDialog");
-    profileDialog.classList.add("translate-x-full");
+const profileDialog = document.getElementById("profileDialog");
+profileDialog.classList.add("translate-x-full");
 }
 
 // Add event listeners to open and close the profile dialog
@@ -104,8 +106,7 @@ openProfileLink.addEventListener("click", openProfile);
 const closeProfileButton = document.getElementById("closeProfile");
 closeProfileButton.addEventListener("click", closeProfile);
 
-    </script>
-        
+</script>
 
 </body>
 </html>

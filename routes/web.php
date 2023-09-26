@@ -34,6 +34,5 @@ Route::post('/register-owner',[CustomAuthenticationController::class,'registerOw
 Route::get('/profile',[CustomAuthenticationController::class,'profile']);
 Route::put('/profileUpdateUser',[CustomAuthenticationController::class,'updateProfileUser'])->name('profileUpdateUser');
 
-
-// Route::get('/details',[upload_details::class,'index']);
+Route::get('/details',[upload_details::class,'detail'])->name('details');
 // Route::post('/details',[upload_details::class,'store'])->name('addDetails');

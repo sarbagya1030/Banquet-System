@@ -11,7 +11,7 @@
     
     <div class="min-h-screen flex justify-center items-center" style= "background-image: linear-gradient(115deg, #00294A,#0F0E12);">
       <div class="container mx-auto">
-        <div class=" flex flex-col justify-center lg:flex-row w-10/12 lg:8/12 bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
+        <div class=" flex flex-col justify-center lg:flex-row w-2/3 lg:8/12 bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
           <div class="w-full lg:w-1/2 flex flex-col items-begin justify-center p-12 bg-no-repeat bg-cover bg-center" style="background-image: url('images/venue.jpg');">
             {{-- <h1 class="text-white text-5xl mb-1 font-bold">Welcome</h1> --}}
             {{-- <div>

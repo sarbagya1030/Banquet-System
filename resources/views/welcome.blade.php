@@ -33,40 +33,26 @@
     </div>
 </section>
 
-//images upload
-<div class="grid grid-cols-3 gap-4">
-    <div class="relative group">
-      <img src="images/image1.jpg" alt="Image 1" class="w-full h-auto rounded-lg">
-      <div class="absolute top-0 left-0 w-full h-full bg-black opacity-0 group-hover:opacity-75 transition-opacity">
-        <!-- Add any content or overlay you want -->
+{{-- images upload --}}
+{{-- <div class="relative overflow-hidden"> --}}
+  <div id="slider" class="overflow-hidden flex transition-transform duration-500 ease-in-out">
+      <div class="w-screen h-80 bg-blue-500"> <img src="images/image1.jpg" alt="Image 1" class="w-full h-auto rounded-lg">
+          <!-- Content for the first slide -->
       </div>
-    </div>
-    <div class="relative group">
-      <img src="images/image2.jpg" alt="Image 2" class="w-full h-auto rounded-lg">
-      <div class="absolute top-0 left-0 w-full h-full bg-black opacity-0 group-hover:opacity-75 transition-opacity">
-        <!-- Add any content or overlay you want -->
+      <div class="w-screen h-80 bg-green-500"> <img src="images/image2.jpg" alt="Image 2" class="w-full h-auto rounded-lg">
+          <!-- Content for the second slide -->
       </div>
-    </div>
-    <div class="relative group">
-      <img src="images/image3.jpg" alt="Image 3" class="w-full h-auto rounded-lg">
-      <div class="absolute top-0 left-0 w-full h-full bg-black opacity-0 group-hover:opacity-75 transition-opacity">
-        <!-- Add any content or overlay you want -->
+      <div class="w-screen h-80 bg-red-500"><img src="images/image3.jpg" alt="Image 3" class="w-full h-auto rounded-lg">
+          <!-- Content for the third slide -->
       </div>
-    </div>
-    <div class="relative group">
-        <img src="images/image4.jpg" alt="Image 1" class="w-full h-auto rounded-lg">
-        <div class="absolute top-0 left-0 w-full h-full bg-black opacity-0 group-hover:opacity-75 transition-opacity">
-          <!-- Add any content or overlay you want -->
-        </div>
-      </div>
-      <div class="relative group">
-        <img src="images/image5.jpg" alt="Image 1" class="w-full h-auto rounded-lg">
-        <div class="absolute top-0 left-0 w-full h-full bg-black opacity-0 group-hover:opacity-75 transition-opacity">
-          <!-- Add any content or overlay you want -->
-        </div>
-      </div>
-    <!-- Add more grid items as needed -->
-  </div>
+      
+  {{-- </div> --}}
+  
+</div>
+
+<button id="prevButton" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 p-2 rounded-full text-white">Previous</button>
+<button id="nextButton" class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-700 p-2 rounded-full text-white">Next</button>
+
 
   
   <section class="bg-gray-100 py-16">
@@ -110,6 +96,7 @@
     </div>
 </footer>
 
+
 <script>
 //about us
 const aboutUsLink = document.getElementById("about-us-link"); // Get a reference to the "About Us" link
@@ -124,6 +111,45 @@ const contactUsSection = document.getElementById("contact-us-section");
 contactUsLink.addEventListener("click", () => { 
     contactUsSection.scrollIntoView({ behavior: "smooth" }); 
 });
+
+
+
+//images
+document.addEventListener("DOMContentLoaded", function () {
+    const slider = document.getElementById("slider");
+    const prevButton = document.getElementById("prevButton");
+    const nextButton = document.getElementById("nextButton");
+    const slides = document.querySelectorAll("#slider > div");
+    let slideIndex = 0;
+
+    function showSlide(index) {
+        // Calculate the translation based on the slide index and the slide width
+        const slideWidth = slides[0].offsetWidth; // Assumes all slides have the same width
+        slider.style.transform = `translateX(-${index * slideWidth}px)`;
+    }
+
+    function nextSlide() {
+        slideIndex = (slideIndex + 1) % slides.length;
+        showSlide(slideIndex);
+    }
+
+    function prevSlide() {
+        slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+        showSlide(slideIndex);
+    }
+
+    nextButton.addEventListener("click", nextSlide);
+    prevButton.addEventListener("click", prevSlide);
+
+    // Auto slide (optional)
+    setInterval(nextSlide, 5000); // Change slide every 5 seconds (adjust as needed)
+
+    // Initially show the first slide
+    showSlide(slideIndex);
+});
+
+
+
 
 </script>
 </body> 

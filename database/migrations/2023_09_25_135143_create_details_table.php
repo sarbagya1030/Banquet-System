@@ -18,9 +18,12 @@ return new class extends Migration
             $table->string('location');
             $table->string('licenseNumber');
             $table->string('contactNumber');
-            $table->string('dates');
             $table->string('capacity');
             $table->string('email');
+            $table->unsignedBigInteger('fk_dates_id');
+            $table->foreign('fk_dates_id')->references('id')->on('dates');
+            $table->unsignedBigInteger('fk_images_id');
+            $table->foreign('fk_images_id')->references('id')->on('images');
             $table->timestamps();
         });
     }

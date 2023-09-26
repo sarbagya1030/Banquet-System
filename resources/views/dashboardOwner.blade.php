@@ -23,48 +23,90 @@
 
 <!-- Create Form -->
 <div class="mt-4 p-4 bg-white rounded shadow">
-    <h2 onclick="createRecord()" class="text-xl font-semibold mb-4" id="creation">Create Record</h2>
-    <form id="createForm" class="space-y-2" >
+    <h2 onclick="createRecord()" class="text-xl font-semibold mb-4 cursor-pointer" id="creation">Create Record</h2>
+    <form id="createForm" method="POST" class="space-y-2" enctype="multipart/form-data" >
+        @if(Session::has('success'))
+              <div role="alert" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3">{{Session::get('success')}}</div>
+              @endif
+              @if(Session::has('fail'))
+              <div role="alert" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">{{Session::get('fail')}}</div>
+              @endif
+            @csrf
+            @method('PUT')
         <!-- Input fields for creating a new record -->
         <div class="flex space-x-2" id="fcreate" style="display: none" >
             <div class="w-1/2">
+                <div>
                 <label for="name" class="mt-4 block text-sm font-medium text-gray-700">Name:</label>
-                <input type="text" id="banquetname" name="name" required
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                <input type="text" id="banquetname" name="banquetname" required
+                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" value="{{$data->banquetname}}">
+                <span class=" text-red-600">@error('banquetname') {{$message}} @enderror</span>
+                </div>
+                
+                <div>
                 <label for="registration" class="mt-4 block text-sm font-medium text-gray-700">Registration Number:</label>
                 <input type="text" id="registration" name="registrationNumber" required
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" value="{{$data->registrationNumber}}"> 
+                <span class=" text-red-600">@error('registrationNumber') {{$message}} @enderror</span>
+                </div>
+
+                <div>
                 <label for="location" class="mt-4 block text-sm font-medium text-gray-700">Location:</label>
                 <input type="text" id="location" name="location" required
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" value="{{$data->location}}">
+                <span class=" text-red-600">@error('location') {{$message}} @enderror</span>
+                </div>
+                
+                <div>
                 <label for="license" class="mt-4 block text-sm font-medium text-gray-700">License Number:</label>
                 <input type="text" id="license" name="licenseNumber" required
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" value="{{$data->licenseNumber}}">
+                <span class=" text-red-600">@error('licenseNumber') {{$message}} @enderror</span>
+                </div>
+
+                <div>
                 <label for="number" class="mt-4 block text-sm font-medium text-gray-700">Contact Number:</label>
                 <input type="number" id="number" name="contactNumber" required
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                <label for="dates" class="mt-4 block text-sm font-medium text-gray-700">Available Dates:</label>
-                <input type="date" id="dates" name="dates" required
-                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" value="{{$data->contactNumber}}">
+                <span class=" text-red-600">@error('contactNumber') {{$message}} @enderror</span>
+                </div>
+
+                <div>
+                    <label for="dates" class="mt-4 block text-sm font-medium text-gray-700">Available Dates:</label>
+                        <div id="dateInputs">
+                            <div class="flex items-center mt-1">
+                                <input type="date" id="dates" name="date[]" required class=" focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                                <button class="bg-blue-400 hover:bg-blue-600 text-white px-4 py-2 rounded ml-2" type="button" onclick="addDateInput()">Add</button>
+                            </div>
+                        </div>
+                </div>
+              
+                <div>
                 <label for="capacity" class="mt-4 block text-sm font-medium text-gray-700">Capacity:</label>
                 <input type="number" id="capacity" name="capacity" required
                     class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                <span class=" text-red-600">@error('capacity') {{$message}} @enderror</span>
+                </div>
+                
+                <div>
                 <label for="email" class="mt-4 block text-sm font-medium text-gray-700">Email:</label>
                 <input type="text" id="email" name="email" required
-                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-        
+                        class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" value="{{$data->email}}">
+                <span class=" text-red-600">@error('email') {{$message}} @enderror</span>
+                </div>
             </div>
 
-            <div class="max-w-2xl">
-                <h1 class=" mt-4 block text-sm font-medium text-gray-700">Upload Images:</h1><br>
+                <div>
+                <h1 class="mt-4 block text-sm font-medium text-gray-700">Upload Images:</h1><br>
                 <input type="file" id="imageInput" name="image[]" multiple class="hidden">
-                <label for="imageInput" class="mt-1 px-4 py-2 bg-gray-500 text-white cursor-pointer rounded-lg">
+                <label for="imageInput" class="mt-1 px-2 py-2 bg-blue-400 hover:bg-blue-600 text-white cursor-pointer rounded-lg">
                     Select Images
                 </label>
                 <div id="imagePreview" class="mt-4 flex flex-wrap">
                     <!-- Preview images will be displayed here -->
                 </div>
-            </div>
+                </div>
+            
         </div>
 
         <div class="mt-4">
@@ -115,7 +157,7 @@
 </div>
 </div>
 
-<!-- JavaScript for CRUD operations -->
+
 <script type="text/javascript">
 // Define JavaScript functions to handle CRUD operations
 // Use fetch or AJAX to communicate with a backend API
@@ -123,8 +165,10 @@
 function createRecord() {
     const form = document.querySelector("#fcreate");
     const create = document.querySelector("#creation");
-form.style.display = "block"
-
+    form.style.display = "block"; 
+//     toggleForm.addEventListener('click', () => {
+//     myForm.classList.toggle('hidden');
+// });
 }
 
 // Function to read and display records
@@ -179,10 +223,26 @@ function handleFileInputChange(event) {
 const imageInput = document.getElementById("imageInput");
 imageInput.addEventListener("change", handleFileInputChange);
 
+
+
+// JavaScript to add more date inputs
+function addDateInput() {
+const dateInputs = document.getElementById('dateInputs');
+const newDateInput = document.createElement('div');
+newDateInput.className = 'flex items-center mb-2';
+newDateInput.innerHTML = `
+    <input class=" focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="date" name="date[]" required>
+    <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-3 rounded ml-2 mt-2" type="button" onclick="removeDateInput(this)">Remove</button>
+`;
+dateInputs.appendChild(newDateInput);
+}
+
+// JavaScript to remove a date input
+function removeDateInput(button) {
+const dateInputs = document.getElementById('dateInputs');
+dateInputs.removeChild(button.parentNode);
+}
+
 </script>
-
-
-
-   
 </body>
 </html>

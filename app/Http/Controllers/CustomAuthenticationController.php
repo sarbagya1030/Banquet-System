@@ -8,6 +8,7 @@ use App\Models\banquetRegister;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
 
 class CustomAuthenticationController extends Controller
 {
@@ -214,49 +215,4 @@ class CustomAuthenticationController extends Controller
                 return back()->with('fail','Something went wrong');
             }
         }
-
-
-        // public function createDetails(Request $request) {
-        //     $request->validate([
-        //         'name' => 'required',
-        //         'registrationNumber' => 'required'
-        //         'location' => 'required',
-        //         'licenseNumber' => 'required'
-        //         'contactNumber' => 'required'
-        //         'dates' => 'required',
-        //         'capacity' => 'requirded',
-        //         'email'=> 'required|email',
-        //         'images' => ,
-        //     ]);
-        
-        //     if(User::where('email','=',$request->email)->first() || banquetRegister::where('email','=',$request->email)->first()) {
-        //         return back()->with('fail','Email already taken');
-        //     }
-        //     else {
-        //         $user = new User();
-        //         $user->name = $request->name;
-        //         $user->registrationNumber = $request->registrationNumber;
-        //         $user->location = $request->location;
-        //         $user->licenseNumber = $request->licenseNumber;
-        //         $user->contactNumber = $request->contactNumber;
-        //         $user->dates = $request->dates;
-        //         $user->capacity = $request->capacity;
-        //         $user->email = $request->email;
-        //         $user->images = $request->images;
-
-
-        //        
-        //         $res = $user->save();
-        //         if($res) {
-        //             return back()->with('success','You have registered successfully');
-        //         }else{
-        //             return back()->with('fail','Something went wrong');
-        //         }
-                
-        //     }
-        //     }
-
-
-
-
     }

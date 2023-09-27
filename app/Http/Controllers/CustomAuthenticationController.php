@@ -62,6 +62,7 @@ class CustomAuthenticationController extends Controller
             'registrationNumber' => 'required',
             'licenseNumber' => 'required',
             'contactNumber' => 'required',
+            'description' => 'max:200',
             'password'=> 'required|min:8|confirmed',
             // 'password_confirmation' => 'required|min:8'
         ]);
@@ -77,6 +78,7 @@ class CustomAuthenticationController extends Controller
         $banquet_registers->registrationNumber = $request->registrationNumber;
         $banquet_registers->licenseNumber = $request->licenseNumber;
         $banquet_registers->contactNumber = $request->contactNumber;
+        $banquet_registers->description = $request->description;
         $banquet_registers->password = Hash::make($request->password);
         // $user->confirm_password = $request->password_confirmation;
         $res = $banquet_registers->save();

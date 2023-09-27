@@ -54,7 +54,7 @@
               </div>
               
               <div class="mt-5">
-                <button class="w-full bg-blue-900 py-3 text-center text-white rounded-lg hover:bg-black hover:text-white">Register Now</button>
+                <button class="w-full bg-blue-400 py-3 text-center text-white rounded-lg hover:bg-black hover:text-white">Register Now</button>
               </div>
 
               {{-- <div class="w-full flex items-center justify-center relative py-8">

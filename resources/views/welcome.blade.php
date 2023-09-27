@@ -34,20 +34,16 @@
 </section>
 
 {{-- images upload --}}
-{{-- <div class="relative overflow-hidden"> --}}
-  <div id="slider" class="overflow-hidden flex transition-transform duration-500 ease-in-out">
-      <div class="w-screen h-80 bg-blue-500"> <img src="images/image1.jpg" alt="Image 1" class="w-full h-auto rounded-lg">
-          <!-- Content for the first slide -->
-      </div>
-      <div class="w-screen h-80 bg-green-500"> <img src="images/image2.jpg" alt="Image 2" class="w-full h-auto rounded-lg">
-          <!-- Content for the second slide -->
-      </div>
-      <div class="w-screen h-80 bg-red-500"><img src="images/image3.jpg" alt="Image 3" class="w-full h-auto rounded-lg">
-          <!-- Content for the third slide -->
-      </div>
-      
-  {{-- </div> --}}
-  
+<div id="slider" class="relative overflow-hidden flex transition-transform duration-500 ease-in-out">
+  <div class="w-full h-80 flex-shrink-0 overflow-hidden">
+      <img src="images/image2.jpg" alt="Image 2" class="w-full h-auto rounded-lg">
+  </div>
+  <div class="w-full h-80 flex-shrink-0 overflow-hidden">
+      <img src="images/image1.jpg" alt="Image 1" class="w-full h-auto rounded-lg">
+  </div>
+  <div class="w-full h-80 flex-shrink-0 overflow-hidden">
+      <img src="images/image3.jpg" alt="Image 3" class="w-full h-auto rounded-lg">
+  </div>
 </div>
 
 <button id="prevButton" class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 p-2 rounded-full text-white">Previous</button>
@@ -114,35 +110,46 @@ contactUsLink.addEventListener("click", () => {
 
 
 
-//images
 document.addEventListener("DOMContentLoaded", function () {
     const slider = document.getElementById("slider");
     const prevButton = document.getElementById("prevButton");
     const nextButton = document.getElementById("nextButton");
     const slides = document.querySelectorAll("#slider > div");
     let slideIndex = 0;
+    let autoSlideInterval;
 
     function showSlide(index) {
-        // Calculate the translation based on the slide index and the slide width
-        const slideWidth = slides[0].offsetWidth; // Assumes all slides have the same width
-        slider.style.transform = `translateX(-${index * slideWidth}px)`;
+        slides.forEach((slide, i) => {
+            if (i === index) {
+                slide.classList.remove("hidden");
+            } else {
+                slide.classList.add("hidden");
+            }
+        });
     }
 
     function nextSlide() {
         slideIndex = (slideIndex + 1) % slides.length;
         showSlide(slideIndex);
+        resetAutoSlide();
     }
 
     function prevSlide() {
         slideIndex = (slideIndex - 1 + slides.length) % slides.length;
         showSlide(slideIndex);
+        resetAutoSlide();
+    }
+
+    function resetAutoSlide() {
+        clearInterval(autoSlideInterval);
+        autoSlideInterval = setInterval(nextSlide, 5000);
     }
 
     nextButton.addEventListener("click", nextSlide);
     prevButton.addEventListener("click", prevSlide);
 
-    // Auto slide (optional)
-    setInterval(nextSlide, 5000); // Change slide every 5 seconds (adjust as needed)
+    // Auto slide
+    autoSlideInterval = setInterval(nextSlide, 5000);
 
     // Initially show the first slide
     showSlide(slideIndex);

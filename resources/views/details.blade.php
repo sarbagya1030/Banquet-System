@@ -51,10 +51,16 @@
                            Location: {{$detail->location}}<br>
                            License Number:{{$detail->licenseNumber}}<br>
                            Contact Number: {{$detail->contactNumber}}<br>
-                           Capacity:{{$detail->capacity}}<br>
                            Email:{{$detail->email}}<br>
-                           Image: {{$detail->image}}<br>
-                           Date: {{$detail->date}}</p>
+                           Description: {{$detail->description}} <br>
+                           Image: {{$detail->path}}<br>
+                           Date: {{$detail->date}}<br>
+                           Item: {{$detail->foodname}}<br>
+                           type: {{$detail->type}}<br>
+                           price: {{$detail->price}}<br>
+                           capacity: {{$detail->banquet_capacity}} <br>
+                           {{-- Parking : {{$detail->2-wheeler}} for 2-wheeler<br>
+                                     {{$detail->4-wheeler}} for 4-wheeler<br> --}}
                     </div>
                     @endforeach
                     @endif

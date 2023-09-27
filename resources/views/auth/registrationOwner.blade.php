@@ -39,7 +39,7 @@
               </div>
 
               <div class="mt-5">
-                <input type="text" placeholder="Location" name="location" value="{{old('location')}}" class="border border-gray-400 py-1 px-2 w-full rounded-lg">
+                <input type="text" placeholder="Address" name="location" value="{{old('location')}}" class="border border-gray-400 py-1 px-2 w-full rounded-lg">
                 <span class=" text-red-600">@error('location') {{$message}} @enderror</span>
               </div>
 
@@ -59,6 +59,12 @@
               </div>
 
               <div class="mt-5">
+                <textarea placeholder="Enter a description" name="description" value="{{old('description')}}" class="border border-gray-400 py-1 px-2 w-full rounded-lg"></textarea>
+                <span class=" text-red-600">@error('description') {{$message}} @enderror</span>
+              </div>
+
+
+              <div class="mt-5">
                 <input type="password" placeholder="Password" name="password" class="border border-gray-400 py-1 px-2 w-full rounded-lg">
                 <span class=" text-red-600">@error('password') {{$message}} @enderror</span>
               </div>
@@ -69,7 +75,7 @@
               </div>
 
               <div class="mt-5">
-                <button class="w-full bg-blue-900 py-3 text-center text-white rounded-lg hover:bg-black hover:text-white">Register Now</button>
+                <button class="w-full bg-blue-400 py-3 text-center text-white rounded-lg hover:bg-black hover:text-white">Register Now</button>
               </div>
 
               {{-- <div class="w-full flex items-center justify-center relative py-8">

@@ -48,7 +48,7 @@
               </div>
               
               <div class="flex mt-5 align-middle justify-center">
-                <button type="submit" class="w-1/2 bg-blue-900 py-3 text-center text-white rounded-lg hover:bg-black hover:text-white">Login
+                <button type="submit" class="w-1/2 bg-blue-400 py-3 text-center text-white rounded-lg hover:bg-black hover:text-white">Login
                 </button>
               </div>
 

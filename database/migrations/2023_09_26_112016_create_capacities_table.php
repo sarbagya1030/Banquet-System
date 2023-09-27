@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dates', function (Blueprint $table) {
+        Schema::create('capacities', function (Blueprint $table) {
             $table->id();
-            $table->string('date');
+            $table->integer('banquet_capacity');
+            $table->integer('2-wheeler');
+            $table->integer('4-wheeler');
+            $table->unsignedBigInteger('fk_banquet_id');
+            $table->foreign('fk_banquet_id')->references('id')->on('banquet_registers');
             $table->timestamps();
         });
     }
@@ -23,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dates');
+        Schema::dropIfExists('capacities');
     }
 };

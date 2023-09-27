@@ -68,7 +68,7 @@
                 <span class=" text-red-600">@error('profile') {{$message}} @enderror</span>
             </div>
             <div>
-                <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">
+                <button type="submit" class="w-full bg-blue-400 text-white py-2 px-4 rounded-md hover:bg-black focus:outline-none focus:ring focus:border-blue-300">
                     Update Profile
                 </button>
             </div>

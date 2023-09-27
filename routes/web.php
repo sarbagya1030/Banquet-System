@@ -36,3 +36,6 @@ Route::put('/profileUpdateUser',[CustomAuthenticationController::class,'updatePr
 
 Route::get('/details',[upload_details::class,'detail'])->name('details');
 // Route::post('/details',[upload_details::class,'store'])->name('addDetails');
+
+Route::post('/menu/{email}',[upload_details::class,'menus'])->name('menu');
+Route::post('/date/{email}',[upload_details::class,'dates'])->name('date');

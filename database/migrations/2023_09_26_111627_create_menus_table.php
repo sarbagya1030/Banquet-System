@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('images', function (Blueprint $table) {
+        Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->string('image');
+            $table->string('foodname');
+            $table->string('type');
+            $table->decimal('price');
+            $table->unsignedBigInteger('fk_banquet_id');
+            $table->foreign('fk_banquet_id')->references('id')->on('banquet_registers');
             $table->timestamps();
         });
     }
@@ -23,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('menus');
     }
 };

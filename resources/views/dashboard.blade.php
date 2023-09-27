@@ -46,8 +46,8 @@
                                 <h1 class="text-2xl font-semibold">{{$data->firstname}}</</h1>
                             </div>
                         </div>
-                        <a href="profile" class="px-2 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300">
-                            Edit Profile
+                        <a href="profile" class="ml-2 px-3 py-2 bg-blue-400 text-white rounded-lg hover:bg-black focus:outline-none focus:ring focus:border-blue-300">
+                            Edit 
                         </a>
                     </div>
                     <hr class="my-4">
@@ -64,8 +64,11 @@
                         </ul>
                     </div>
                 </div>
-                <button id="closeProfile" class="bg-blue-500 text-white py-2 px-4 mt-6 ml-16 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-red-300">
-                    Close Profile
+
+                <button id="closeProfile" class= "absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
 

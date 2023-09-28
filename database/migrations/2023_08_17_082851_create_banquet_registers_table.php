@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('registrationNumber');
             $table->string('licenseNumber');
             $table->string('contactNumber');
-            $table->string('description')->nullable();
+            $table->text('description')->nullable();
             $table->string('password');
             $table->timestamps();
         });

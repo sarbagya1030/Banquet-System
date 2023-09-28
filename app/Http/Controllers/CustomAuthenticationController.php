@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\banquetRegister;
+use App\Models\capacity;
+use App\Models\dates;
+use App\Models\images;
+use App\Models\menu;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File;
@@ -62,7 +66,7 @@ class CustomAuthenticationController extends Controller
             'registrationNumber' => 'required',
             'licenseNumber' => 'required',
             'contactNumber' => 'required',
-            'description' => 'max:200',
+            'description' => 'required',
             'password'=> 'required|min:8|confirmed',
             // 'password_confirmation' => 'required|min:8'
         ]);
@@ -73,11 +77,11 @@ class CustomAuthenticationController extends Controller
         else {
         $banquet_registers = new banquetRegister();
         $banquet_registers->banquetname = $request->banquetname;
-        $banquet_registers->email = $request->email;
+        $banquet_registers->email = $request->input('email');
         $banquet_registers->location = $request->location;
         $banquet_registers->registrationNumber = $request->registrationNumber;
         $banquet_registers->licenseNumber = $request->licenseNumber;
-        $banquet_registers->contactNumber = $request->contactNumber;
+        $banquet_registers->contactNumber = $request->input('contactNumber');
         $banquet_registers->description = $request->description;
         $banquet_registers->password = Hash::make($request->password);
         // $user->confirm_password = $request->password_confirmation;
@@ -159,10 +163,13 @@ class CustomAuthenticationController extends Controller
 
     public function dashOwner() {
         $data = array();
-        if(Session::has('loginEmail')) {
-            $data = banquetRegister::where('email','=',Session::get('loginEmail'))->first();
-        }
-        return view('dashboardOwner',compact('data'));    
+        $data = banquetRegister::where('email','=',Session::get('loginEmail'))->first();
+        $capacity = capacity::where('fk_banquet_id','=',$data->id)->first();
+        $dates = dates::where('fk_banquet_id','=',$data->id)->get();
+        $image = images::where('fk_banquet_id','=',$data->id)->get();
+        $menu = menu::where('fk_banquet_id','=',$data->id)->get();
+
+        return view('dashboardOwner',compact('data','image'));    
     }
 
     public function updateProfileUser(Request $request) {

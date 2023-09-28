@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <title>Dashboard_Owner</title>
 </head>
-<body>
+<body class="bg-gray-100">
      <!-- Navigation Bar -->
      <div class= "p-4 text-white" style= "background-image: linear-gradient(115deg, #00294A,#0F0E12);">
         <div class="container mx-auto flex justify-between items-center">
@@ -18,140 +19,157 @@
                 <li><a href="logout" class="hover:underline">Logout</a></li>
             </ul>
         </div>
-    </div>
-
-    <div class="flex justify-center">
-        <!-- Left Column - Form -->
-        <div class="w-1/2 p-4">
-            <div class="mt-8 p-4 bg-white rounded shadow">
-                <h1 onclick="createRecord()" class="text-2xl font-semibold mb-6 cursor-pointer" id="creation">Create & Update Record</h1>
-               
-                    <!-- Input fields for creating a new record -->
-                    <div class="flex space-x-2" id="fcreate" style="display: none" >
-
-                            {{-- //food menu --}}
-                            <div class="max-w-2xl mx-auto mt-8 p-6 bg-white shadow-md rounded-md">
-                                <h2  class="text-xl font-semibold mb-4 cursor-pointer">Insert Food Menu</h2>
-                                <form id="menu" action="{{route('menu',Session::get('loginEmail'))}}" method="POST">
-                                  @if(Session::has('success'))
-                                  <div role="alert" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3">{{Session::get('success')}}</div>
-                                  @endif
-                                  @if(Session::has('fail'))
-                                  <div role="alert" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">{{Session::get('fail')}}</div>
-                                  @endif
-                                  @csrf
-
-                                  <div class="mb-4">
-                                    <label for="item_name" class="block text-gray-700 font-semibold mb-2">Item Name:</label>
-                                    <input type="text" id="item_name" name="item_name" class="border rounded-md px-3 py-2 w-full" required>
-                                    <span class=" text-red-600">@error('item_name') {{$message}} @enderror</span>
-                                  </div>
-                              
-                                  <div class="mb-4">
-                                    <label for="type" class="block text-gray-700 font-semibold mb-2">Type:</label>
-                                    <input type="radio" id="snacks" name="type">
-                                    <label for="type" class="mr-8">Snacks</label>
-                                    <input type="radio" id="dinner" name="type">
-                                    <label for="type" class="mr-8">Dinner</label>
-                                    <input type="radio" id="desert" name="type">
-                                    <label for="type" class="mr-8">Desert</label>
-                                    <span class=" text-red-600">@error('type') {{$message}} @enderror</span>
-                                  </div>
-                              
-                                  <div class="mb-4">
-                                    <label for="price" class="block text-gray-700 font-semibold mb-2">Price:</label>
-                                    <input type="number" id="price" name="price" class="border rounded-md px-3 py-2 w-full" step="0.01" required>
-                                    <span class=" text-red-600">@error('price') {{$message}} @enderror</span>
-                                  </div>
-                              
-                              
-                                  <div class="mt-6">
-                                    <button type="submit" class="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add Items</button>
-                                  </div>
-                                </form>
-                              </div>
+      </div>
 
 
-                            {{-- //available-dates --}}
-                              <div class="max-w-2xl mx-auto mt-8 p-6 bg-white shadow-md rounded-md">
-                                <h2 class="text-xl font-semibold mb-4 cursor-pointer">Insert Available Dates</h2>
-                                <form id="dates" method="POST"" action="">
-                                  @csrf
-                              
-                                  <div class="mb-4">
-                                    <label for="dates" class="block text-gray-700 font-semibold mb-2">Available Dates:</label>
-                                    <div id="dateInputs">
-                                        <div class="flex items-center mt-1">
-                                            <input type="date" id="dates" name="date[]" required class=" focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
-                                            <button class="bg-blue-400 hover:bg-blue-600 text-white px-4 py-2 rounded ml-2" type="button" onclick="addDateInput()">Add</button>
-                                        </div>
-                                    </div>
-                                  </div>
-    
-                              
-                                  <div class="mt-6">
-                                    <button type="submit" class="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add Dates</button>
-                                  </div>
-                                </form>
-                              </div>
+        <div class= "p-12">
+        <div class="mb-6 ml-0 max-w-full mx-auto bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-center text-2xl font-bold mb-4">{{$data->banquetname}}</h2>
 
-                                
-                        
-                              {{-- multiple images --}}
-                              <div class="max-w-2xl mx-auto mt-8 p-6 bg-white shadow-md rounded-md">
-                                <h2 class="text-xl font-semibold mb-4 cursor-pointer">Upload Images</h2>
-                                <form id="images" action="" method="POST">
-                                  @csrf
-                              
-                                  <div class="mb-4">
-                                    <label for="images" class="block text-gray-700 font-semibold mb-2">Select Images:</label>
-                                    <input type="file" id="images" name="images[]" class="border rounded-md px-3 py-2 w-full" multiple required>
-                                  </div>
-                              
-                                  <div class="mt-6">
-                                    <button type="submit" class="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add Images</button>
-                                  </div>
-                                </form>
-                              </div>
-
-
-                              {{-- //capacity --}}
-                              <div class="max-w-2xl mx-auto mt-8 p-6 bg-white shadow-md rounded-md">
-                                <h2 class="text-xl font-semibold mb-4 cursor-pointer">Banquet Capacity</h2>
-                              
-                                <form id="capacity" method="POST" action="">
-                                  @csrf
-                              
-                                  <div class="mb-4">
-                                    <label for="banquet_capacity" class="block text-gray-700 font-semibold mb-2">Banquet Capacity:</label>
-                                    <input type="number" id="banquet_capacity" name="banquet_capacity" class="border rounded-md px-3 py-2 w-full" required>
-                                    <span class=" text-red-600">@error('banquet_capacity') {{$message}} @enderror</span>
-                                  </div>
-                              
-                                  <div class="mb-4">
-                                    <label for="two_wheeler_capacity" class="block text-gray-700 font-semibold mb-2">Two-Wheeler Capacity:</label>
-                                    <input type="number" id="two_wheeler_capacity" name="two_wheeler_capacity" class="border rounded-md px-3 py-2 w-full" required>
-                                    <span class=" text-red-600">@error('two_wheeler_capacity') {{$message}} @enderror</span>
-                                  </div>
-                              
-                                  <div class="mb-4">
-                                    <label for="four_wheeler_capacity" class="block text-gray-700 font-semibold mb-2">Four-Wheeler Capacity:</label>
-                                    <input type="number" id="four_wheeler_capacity" name="four_wheeler_capacity" class="border rounded-md px-3 py-2 w-full" required>
-                                    <span class=" text-red-600">@error('four_wheeler_capacity') {{$message}} @enderror</span>
-                                  </div>
-                              
-                                  <div class="mt-6">
-                                    <button type="submit" class="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Add Capacity</button>
-                                  </div>
-                                </form>
-                              </div>
-                              
-
-                        
-                    </div>
-
+             <!-- License Number and Registration Number -->
+            <div class="max-w-3xl mx-auto bg-blue-100 rounded-lg p-6 h-16 flex items-center">
+                <div class="w-1/2 pr-4">
+                  <strong>License Number:</strong> {{$data->licenseNumber}}
+                </div>
+                <div class="w-1/2 pl-4 border-l border-gray-400">
+                  <strong>Registration Number:</strong>  {{$data->registrationNumber}}
+                </div>
             </div>
+          
+          
+
+        {{-- banquet Details --}}
+            <div class="p-4">
+                  <hr class="my-2">
+                  <div>
+                      <p class="text-gray-700">{{$data->description}}</p>
+                  </div>
+            </div>
+        
+         <!-- Images Section -->
+          <div class="grid grid-cols-3 gap-4">
+          @foreach($image as $im)
+
+          <img src="{{asset('/banquet/'.$im->path)}}" alt="Image 1" class="rounded-lg">
+          @endforeach
+
+
+          </div>
         </div>
+       
+        
+        
+    
+        <!-- Available Dates Section -->
+        <div class="mb-6 ml-0 max-w-full mx-auto bg-white rounded-lg shadow-md p-6">
+          <h3 class="text-2xl font-semibold mb-4">Available Dates</h3>
+         
+          <ul>
+          <li><i class="far fa-calendar text-1xl text-blue-500 mr-2"></i>Available Date 1</li>
+          <li><i class="far fa-calendar text-1xl text-blue-500 mr-2"></i>Available Date 1</li>
+          <li><i class="far fa-calendar text-1xl text-blue-500 mr-2"></i>Available Date 1</li>
+          </ul>
+        </div>
+    
+  
+          {{-- food menu --}}
+            <div class="mb-6 ml-0 max-w-full mx-auto bg-white rounded-lg shadow-md p-6">
+              <h2 class="text-2xl font-semibold mb-4">Food Menu</h2>
+          
+              <!-- Menu Categories as Columns -->
+              <div class="grid grid-cols-3 gap-4">
+                <!-- Dinner Category -->
+                <div class="bg-blue-100 rounded-lg p-4">
+                  <h3 class="text-lg font-semibold mb-2">Dinner</h3>
+                  <ul>
+                    <li class="mb-2">Dish 1 - $10.99</li>
+                    <li class="mb-2">Dish 2 - $12.99</li>
+                    <!-- Add more dinner items as needed -->
+                  </ul>
+                </div>
+          
+                <!-- Snacks Category -->
+                <div class="bg-green-100 rounded-lg p-4">
+                  <h3 class="text-lg font-semibold mb-2">Snacks</h3>
+                  <ul>
+                    <li class="mb-2">Snack 1 - $4.99</li>
+                    <li class="mb-2">Snack 2 - $6.99</li>
+                    <!-- Add more snack items as needed -->
+                  </ul>
+                </div>
+          
+                <!-- Dessert Category -->
+                <div class="bg-red-100 rounded-lg p-4">
+                  <h3 class="text-lg font-semibold mb-2">Dessert</h3>
+                  <ul>
+                    <li class="mb-2">Dessert 1 - $7.99</li>
+                    <li class="mb-2">Dessert 2 - $8.99</li>
+                    <!-- Add more dessert items as needed -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+          
+          
+    
+        <!-- Capacity Section -->
+        <div class="mb-6 ml-0 max-w-full mx-auto bg-white rounded-lg shadow-md p-6">
+          <h3 class="text-2xl font-semibold mb-4">Capacity</h3>
+          <ul>
+            <li>Banquet Capacity - {{$data->banquet_capacity}}</li>
+            <li>Two-Wheeler Capacity - {{$data->twowheeler}}</li>
+            <li>Four-Wheeler Capacity - {{$data->fourwheeler}}</li>
+          </ul>
+        </div>
+
+
+        <!-- Contact Information-->
+          <div class="mb-6 ml-0 max-w-full mx-auto bg-white rounded-lg shadow-md p-6">
+              <h3 class="text-2xl font-semibold mb-4">Contact Information</h3>
+              <div class="mt-8">
+                <span class="text-blue-600">
+                  <i class="fas fa-envelope"></i>
+                </span>
+                <a href="mailto:{{$data->email}}" class="text-blue-600 hover:underline">{{$data->email}}</a>
+              </div>
+
+              <div class="mt-4">
+                <span class="text-green-600">
+                  <i class="fas fa-phone"></i>
+                </span>
+                <a href="tel:{{$data->contactNumber}}" class="text-blue-600 hover:underline">{{$data->contactNumber}}</a>
+              </div>
+
+              <div class="mt-4">
+                <span class="text-red-600">
+                  <i class="fas fa-map-marker-alt"></i>
+                </span>
+                <a href="{{$data->location}}" class="text-blue-600 hover:underline">{{$data->location}}</a>
+              </div>
+          </div>
+      
+
+
+
+
+      <div id="button" class="flex justify-between">
+         <!-- Update Button -->
+      <div class="text-center">
+        <a href="create-record" class="ml-32 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+          Create Record
+        </a>
+      </div>
+
+       <!--Delete Button -->
+       <div class="text-center">
+        <a href="delete-record" class="mr-32 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+          Delete Record
+        </a>
+        </div>
+       </div>
+
+      </div>
+       
       
         {{-- <!-- Right Column - View Details -->
         
@@ -220,18 +238,12 @@
 
 
 function createRecord() {
-    const form = document.querySelector("#fcreate");
-    const create = document.querySelector("#creation");
-    form.style.display = "block"; 
-//     toggleForm.addEventListener('click', () => {
-//     myForm.classList.toggle('hidden');
-// });
+
 }
 
 // Function to read and display records
 function readRecords() {
-    // Send a GET request to the server to retrieve records
-    // Populate the recordList table with the retrieved data
+
 }
 
 
@@ -239,32 +251,6 @@ function readRecords() {
 function deleteRecord(recordId) {
     // Send a DELETE request to the server to delete the record
     // Remove the corresponding row from the table
-}
-
-// Add event listeners to call CRUD functions on form submissions, button clicks, etc.
-
-// Initialize the UI by calling readRecords() on page load
-
-
-
-
-
-// JavaScript to add more date inputs
-function addDateInput() {
-const dateInputs = document.getElementById('dateInputs');
-const newDateInput = document.createElement('div');
-newDateInput.className = 'flex items-center mb-2';
-newDateInput.innerHTML = `
-    <input class=" focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="date" name="date[]" required>
-    <button class="bg-red-500 hover:bg-red-600 text-white py-2 px-3 rounded ml-2 mt-2" type="button" onclick="removeDateInput(this)">Remove</button>
-`;
-dateInputs.appendChild(newDateInput);
-}
-
-// JavaScript to remove a date input
-function removeDateInput(button) {
-const dateInputs = document.getElementById('dateInputs');
-dateInputs.removeChild(button.parentNode);
 }
 
 

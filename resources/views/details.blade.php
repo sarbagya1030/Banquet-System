@@ -59,8 +59,8 @@
                            type: {{$detail->type}}<br>
                            price: {{$detail->price}}<br>
                            capacity: {{$detail->banquet_capacity}} <br>
-                           {{-- Parking : {{$detail->2-wheeler}} for 2-wheeler<br>
-                                     {{$detail->4-wheeler}} for 4-wheeler<br> --}}
+                           Parking : {{$detail->twowheeler}} for 2-wheeler<br>
+                                     {{$detail->threewheeler}} for 4-wheeler<br>
                     </div>
                     @endforeach
                     @endif

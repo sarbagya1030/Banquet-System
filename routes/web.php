@@ -37,5 +37,11 @@ Route::put('/profileUpdateUser',[CustomAuthenticationController::class,'updatePr
 Route::get('/details',[upload_details::class,'detail'])->name('details');
 // Route::post('/details',[upload_details::class,'store'])->name('addDetails');
 
+
+Route::get('/create-record',[upload_details::class,'recordupdate'])->name('create-record');
 Route::post('/menu/{email}',[upload_details::class,'menus'])->name('menu');
 Route::post('/date/{email}',[upload_details::class,'dates'])->name('date');
+Route::post('/image/{email}',[upload_details::class,'images'])->name('image');
+Route::post('/capacity/{email}',[upload_details::class,'capacities'])->name('capacity');
+
+Route::get('/delete-record',[upload_details::class,'recorddelete'])->name('delete-record');

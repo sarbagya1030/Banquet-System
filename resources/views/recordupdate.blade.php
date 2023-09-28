@@ -49,12 +49,12 @@
                           
                               <div class="mb-4">
                                 <label for="type" class="block text-gray-700 font-semibold mb-2">Type:</label>
-                                <input type="radio" id="snacks" name="type">
+                                <input type="radio" id="snacks" name="type" value="snacks">
                                 <label for="type" class="mr-8">Snacks</label>
-                                <input type="radio" id="dinner" name="type">
+                                <input type="radio" id="dinner" name="type" value="dinner">
                                 <label for="type" class="mr-8">Dinner</label>
-                                <input type="radio" id="desert" name="type">
-                                <label for="type" class="mr-8">Desert</label>
+                                <input type="radio" id="dessert" name="type" value="dessert">
+                                <label for="type" class="mr-8">Dessert</label>
                                 <span class=" text-red-600">@error('type') {{$message}} @enderror</span>
                               </div>
                           

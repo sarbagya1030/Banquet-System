@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->string('foodname');
-            $table->string('type');
-            $table->decimal('price');
+            $table->string('foodname')->nullable();
+            $table->string('type')->nullable();
+            $table->decimal('price')->nullable();
             $table->unsignedBigInteger('fk_banquet_id');
             $table->foreign('fk_banquet_id')->references('id')->on('banquet_registers');
             $table->timestamps();

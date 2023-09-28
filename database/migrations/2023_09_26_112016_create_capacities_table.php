@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('capacities', function (Blueprint $table) {
             $table->id();
-            $table->integer('banquet_capacity');
-            $table->integer('twowheeler');
-            $table->integer('fourwheeler');
+            $table->integer('banquet_capacity')->nullable();
+            $table->integer('twowheeler')->nullable();
+            $table->integer('fourwheeler')->nullable();
             $table->unsignedBigInteger('fk_banquet_id');
             $table->foreign('fk_banquet_id')->references('id')->on('banquet_registers');
             $table->timestamps();

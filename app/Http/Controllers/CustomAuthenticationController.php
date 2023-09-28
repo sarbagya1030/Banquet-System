@@ -162,14 +162,56 @@ class CustomAuthenticationController extends Controller
     }
 
     public function dashOwner() {
+
         $data = array();
+        $dinner = null;
+        $snacks = null;
+        $dessert = null;
         $data = banquetRegister::where('email','=',Session::get('loginEmail'))->first();
         $capacity = capacity::where('fk_banquet_id','=',$data->id)->first();
+
+        $datesCheck = dates::where('fk_banquet_id','=',$data->id)->first();
+        $imageCheck = images::where('fk_banquet_id','=',$data->id)->first();
+        $menuCheck = menu::where('fk_banquet_id','=',$data->id)->first();
         $dates = dates::where('fk_banquet_id','=',$data->id)->get();
         $image = images::where('fk_banquet_id','=',$data->id)->get();
         $menu = menu::where('fk_banquet_id','=',$data->id)->get();
 
-        return view('dashboardOwner',compact('data','image'));    
+        foreach ($menu as $m) {
+            if ($m->type == 'dinner') {
+                $dinner = 1;
+                break;
+            }
+        }
+   
+        foreach ($menu as $m) {
+            if ($m->type == 'snacks') {
+                $snacks = 1;
+                break;
+            }
+        }
+
+        foreach ($menu as $m) {
+            if ($m->type == 'dessert') {
+                $dessert = 1;
+                break;
+            }
+        }
+
+
+        if($datesCheck == null)
+        {
+            $dates = null;
+        }
+        if($imageCheck == null)
+        {
+            $image = null;
+        }
+        if($menuCheck == null){
+            $menu = null;
+        }
+
+        return view('dashboardOwner',compact('data','image','menu','dates','capacity','dinner','snacks','dessert'));    
     }
 
     public function updateProfileUser(Request $request) {

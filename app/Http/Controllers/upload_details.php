@@ -135,10 +135,10 @@ class upload_details extends Controller
         return view ("recordupdate");
     }
 
-    public function recorddelete() {
-        return view ("recorddelete");
+
+    public function profileUpdateOwner() {
+        $value= banquetRegister::where('email','=',Session::get('loginEmail'))->first();
+
+        return view ("profileOwner",compact('value'));
     }
-
-
-   
 }

@@ -44,4 +44,5 @@ Route::post('/date/{email}',[upload_details::class,'dates'])->name('date');
 Route::post('/image/{email}',[upload_details::class,'images'])->name('image');
 Route::post('/capacity/{email}',[upload_details::class,'capacities'])->name('capacity');
 
-Route::get('/delete-record',[upload_details::class,'recorddelete'])->name('delete-record');
+
+Route::get('/updateProfile-owner',[upload_details::class,'profileUpdateOwner'])->name('updateProfile-owner');

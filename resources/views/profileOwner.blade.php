@@ -16,7 +16,7 @@
         <div class="container mx-auto flex justify-between items-center">
             <div><img src="images/logo.png" class="h-12 w-12" alt="logo"></div>
             <ul class="flex space-x-4">
-                <li><a href="dashboardOwner" class="hover:underline">Home</a></li>
+                <li><a href="{{ route('dashboardOwner') }}" class="hover:underline">Home</a></li>
                 <li><a href="#" id="profile-link" class="hover:underline">Profile</a></li>
                 <li><a href="logout" class="hover:underline">Logout</a></li>
             </ul>
@@ -137,14 +137,17 @@
                     Update Profile
                 </button>
             </div>
-
-            <div>
-                <button type="delete"
-                    class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-black focus:outline-none focus:ring focus:border-blue-300">
-                    Delete Profile
-                </button>
-            </div>
         </form>
+
+        <form action="{{ route('deleteOwner-profile', Session::get('loginEmail')) }}" method="POST">
+            @csrf
+            @method('delete')
+            <button type="submit"
+                class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-black focus:outline-none focus:ring focus:border-blue-300">
+                Delete Profile
+            </button>
+        </form>
+
     </div>
 
 

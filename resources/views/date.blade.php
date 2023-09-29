@@ -16,7 +16,7 @@
         <div class="container mx-auto flex justify-between items-center">
             <div><img src="images/logo.png" class="h-12 w-12" alt="logo"></div>
             <ul class="flex space-x-4">
-                <li><a href="dashboardOwner" class="hover:underline">Home</a></li>
+                <li><a href="{{ route('dashboardOwner') }}" class="hover:underline">Home</a></li>
                 <li><a href="#" id="profile-link" class="hover:underline">Profile</a></li>
                 <li><a href="logout" class="hover:underline">Logout</a></li>
             </ul>
@@ -39,8 +39,14 @@
                         <tr>
                             <td class="border p-4 text-center">{{ $sc->date }}</td>
                             <td class="flex justify-center border p-4">
-                                <button class="bg-blue-500 text-white px-4 py-2 rounded-lg mr-2">Edit</button>
-                                <button class="bg-red-500 text-white px-4 py-2 rounded-lg">Delete</button>
+                                <a href="create-record"
+                                    class="bg-blue-500 hover:bg-blue-800 text-white px-4 py-2 rounded-lg mr-2">Edit</a>
+                                <form action="{{ route('deleteDate-banquet', $sc->id) }}" method="POST">
+                                    @csrf
+                                    @method('delete')
+                                    <button
+                                        class="bg-red-500 hover:bg-red-800 text-white px-4 py-2 rounded-lg">Delete</button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach

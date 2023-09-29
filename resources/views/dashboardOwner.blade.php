@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
     <title>Dashboard_Owner</title>
 </head>
 
@@ -16,7 +17,7 @@
         <div class="container mx-auto flex justify-between items-center">
             <div><img src="images/logo.png" class="h-12 w-12" alt="logo"></div>
             <ul class="flex space-x-4">
-                <li><a href="dashboardOwner" class="hover:underline">Home</a></li>
+                <li><a href="{{ route('dashboardOwner') }}" class="hover:underline">Home</a></li>
                 <li><a href="#" id="profile-link" class="hover:underline">Profile</a></li>
                 <li><a href="logout" class="hover:underline">Logout</a></li>
             </ul>
@@ -50,21 +51,45 @@
 
 
             <!-- Images Section -->
-            <div class="flex justify-center flex-nowrap overflow-x-scroll" id="imagescroll">
+            <div class="flex justify-center flex-nowrap overflow-x-auto" id="imagescroll">
                 @if ($image != null)
                     @foreach ($image as $im)
-                        <div class="relative mx-4">
-                            <img src="{{ asset('/banquet/' . $im->path) }}" alt="Image 1" class="rounded-md w-96 h-60">
-                            <i
-                                class="absolute top-2 right-2 text-white cursor-pointer hover:text-red-700 transition duration-300 ease-in-out fas fa-times"></i>
+                        <div class="mx-4 relative"> <!-- Added relative positioning -->
+                            <img src="{{ asset('/banquet/' . $im->path) }}" alt="Image 1" class="rounded-md"
+                                style="height: 200px; width: 400px">
+                            <form action="{{ route('deleteImage-banquet', $im->id) }}" method="POST">
+                                @csrf
+                                @method('delete')
+                                <button type="submit"
+                                    class="absolute top-2 right-2 text-white cursor-pointer hover:text-black transition duration-300 ease-in-out">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>
                         </div>
                     @endforeach
+                    <!-- Add Button -->
+                    <a href="create-record"
+                        class="w-10 h-10 flex items-center justify-center bg-blue-500 text-white rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
+                            </path>
+                        </svg>
+                    </a>
                 @else
-                    <p>No Image available</p>
+                    <!-- Add Button -->
+                    <div class="flex justify-center w-full">
+                        <a href="create-record"
+                            class=" bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-2 rounded-lg">
+                            Add Image
+                        </a>
+                    </div>
                 @endif
             </div>
 
         </div>
+
+
 
         @if ($dates != null)
             <!-- Available Dates Section -->
@@ -99,7 +124,8 @@
             {{-- food menu --}}
             <div class="mb-4 ml-0 max-w-full mx-auto bg-white rounded-lg shadow-md p-6">
                 <div id="icons" class="flex justify-end">
-                    <a href="#" class="text-blue-500 hover:text-blue-700 mr-2"> <!-- Edit Icon -->
+                    <a href="{{ route('menu-view') }}" class="text-blue-500 hover:text-blue-700 mr-2">
+                        <!-- Edit Icon -->
                         <i class="fas fa-edit"></i>
                     </a>
                 </div>
@@ -176,6 +202,12 @@
             </div>
         @else
             <div class="mb-4 ml-0 max-w-full mx-auto bg-white rounded-lg shadow-md p-6">
+                <div id="icons" class="flex justify-end">
+                    <a href="{{ route('create-record') }}" class="text-blue-500 hover:text-blue-700 mr-2">
+                        <!-- Edit Icon -->
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </div>
                 <h2 class="text-2xl font-semibold mb-4">Food Menu</h2>
                 <p>No Food to show</p>
 
@@ -187,7 +219,8 @@
         @if ($capacity)
             <div class="mb-4 ml-0 max-w-full mx-auto bg-white rounded-lg shadow-md p-6">
                 <div id="icons" class="flex justify-end">
-                    <a href="#" class="text-blue-500 hover:text-blue-700 mr-2"> <!-- Edit Icon -->
+                    <a href="{{ route('capacity-view') }}" class="text-blue-500 hover:text-blue-700 mr-2">
+                        <!-- Edit Icon -->
                         <i class="fas fa-edit"></i>
                     </a>
                 </div>
@@ -201,6 +234,12 @@
             </div>
         @else
             <div class="mb-4 ml-0 max-w-full mx-auto bg-white rounded-lg shadow-md p-6">
+                <div id="icons" class="flex justify-end">
+                    <a href="{{ route('create-record') }}" class="text-blue-500 hover:text-blue-700 mr-2">
+                        <!-- Edit Icon -->
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </div>
                 <h3 class="text-2xl font-semibold mb-4">Capacity</h3>
 
                 <p>Not Available</p>
@@ -237,39 +276,9 @@
         </div>
 
 
-        <!-- Create Button -->
-        <div class="flex justify-center">
-            <a href="create-record"
-                class="ml-32 bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-lg">
-                Create Record
-            </a>
-        </div>
-
-
     </div>
 
     </div>
-
-
-    {{-- <!-- Right Column - View Details -->
-        
-            <div class="mt-8 bg-white rounded shadow p-4">
-                <h2 class="text-xl font-semibold mb-4">View Records</h2>
-                <table class="min-w-full">
-                        <thead>
-                            <th>Name</th>
-                            <th>Email</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{$data->banquetname}}</td>
-                                <td>{{$data->email}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-            </div>     --}}
-
-
 
 
     <div id="profile-dialog"
@@ -278,7 +287,7 @@
         <div class="mt-8 bg-white p-6 rounded-lg shadow-lg">
             <!-- User Profile Header -->
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-2xl font-semibold">User Profile</h2>
+                <h2 class="text-2xl font-semibold">Banquet Profile</h2>
                 <a href="{{ route('profile-owner') }}" class="text-blue-500 hover:underline">Edit Profile</a>
             </div>
 
@@ -291,7 +300,7 @@
 
                 <div>
                     <label class="font-semibold">Contact Number:</label>
-                    <p class="text-gray-700">123-456-7890</p>
+                    <p class="text-gray-700">{{ $data->contactNumber }}</p>
                 </div>
 
                 <div>
@@ -301,7 +310,7 @@
 
                 <div>
                     <label class="font-semibold">Location:</label>
-                    <p class="text-gray-700">123 Main St, City, Country</p>
+                    <p class="text-gray-700">{{ $data->location }}</p>
                 </div>
             </div>
         </div>
@@ -318,21 +327,7 @@
 
 
     <script type="text/javascript">
-        function createRecord() {
-
-        }
-
-        // Function to read and display records
-        function readRecords() {
-
-        }
-
-
-        // Function to delete a record
-        function deleteRecord(recordId) {
-            // Send a DELETE request to the server to delete the record
-            // Remove the corresponding row from the table
-        }
+        function createRecord() {}
 
 
         //profile dialogue
@@ -352,7 +347,36 @@
                 profileDialog.classList.add('translate-x-full');
             });
         });
+
+        // var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        // function deleteImage(deleteUrl) {
+        //     if (confirm('Are you sure you want to delete this image?')) {
+        //         var xhr = new XMLHttpRequest(); // Create a new XMLHttpRequest\
+
+        //         xhr.open('DELETE', deleteUrl, true); // Configure the DELETE request
+
+        //         // Include the CSRF token in the request headers
+        //         xhr.setRequestHeader('X-CSRF-TOKEN', '{{ csrf_token() }}');
+
+        //         // Define a callback function to handle the response
+        //         xhr.onload = function() {
+        //             if (xhr.status === 200) {
+        //                 // Image deleted successfully
+        //                 var imageContainer = document.querySelector('.mx-4.relative');
+        //                 imageContainer.parentNode.removeChild(imageContainer);
+        //             } else {
+
+        //                 alert('Error deleting image'); // Handle errors here
+        //             }
+        //         };
+
+        //         xhr.send(); // Send the DELETE request
+        //     }
+        // }
     </script>
+
+
 </body>
 
 </html>

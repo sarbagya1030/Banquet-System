@@ -258,10 +258,17 @@ class CustomAuthenticationController extends Controller
                 // $temp1->update();
             }
             if($request->hasFile('profile')) {
-                // $image_path = "/profile_pictures/$temp1->profile";
-                // if(File::exists($image_path)){
-                //     File::delete($image_path);
-                // }
+                $image_path = public_path("profile_pictures/{$temp1->profile}");
+                if(File::exists($image_path)) {
+                    try{
+                        File::delete($image_path);
+                    }
+                    catch(\Exception $e) {
+                        return back()->with('fail','Error deleting the existing image');
+                    }
+                    
+                }
+
                 $request->validate([
                     'profile'=> 'image|mimes:png,jpeg,jpg,svg,gif|max:5048',
                 ]);

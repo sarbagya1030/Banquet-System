@@ -180,4 +180,101 @@ class upload_details extends Controller
 
         return view('date',compact('select'));
     }
+
+    public function menuView(Request $request) {
+        $row = banquetRegister::where('email','=',Session::get('loginEmail'))->first();
+        $select= menu::where('fk_banquet_id','=',$row->id)->get();
+
+        return view('menu',compact('select'));
+    }
+
+    public function capacityView(Request $request) {
+        $row = banquetRegister::where('email','=',Session::get('loginEmail'))->first();
+        $select= capacity::where('fk_banquet_id','=',$row->id)->get();
+
+        return view('capacity',compact('select'));
+    }
+
+    public function deleteImages($id) {
+        $delete= images::where('id','=',$id)->first();
+        $delete->delete();
+
+        $image_path = public_path("banquet/{$delete->path}");
+        if(File::exists($image_path)) {
+            try{
+                File::delete($image_path);
+            }
+            catch(\Exception $e) {
+                return back()->with('fail','Error deleting the existing image');
+            }
+          
+        }
+        return back()->with('success','Image has been deleted');
+    }
+
+    public function deleteDates($id) {
+        $delete= dates::where('id','=',$id)->first();
+        $delete->delete();
+
+        return back()->with('success','Date has been deleted');
+    }
+
+    public function deleteFoods($id) {
+        $delete= menu::where('id','=',$id)->first();
+        $delete->delete();
+
+        return back()->with('success','Item has been deleted');
+    }
+
+    public function deleteCapacities($id) {
+        $delete= capacity::where('id','=',$id)->first();
+        $delete->delete();
+
+        return back()->with('success','Capacity has been deleted');
+    }
+
+    public function deleteownerProfile($email) {
+        $delete = banquetRegister::where('email','=',$email)->first();
+        $date = dates::where('fk_banquet_id','=',$delete->id)->get();
+        $menu = menu::where('fk_banquet_id','=',$delete->id)->get();
+        $images = images::where('fk_banquet_id','=',$delete->id)->get();
+        $capacity = capacity::where('fk_banquet_id','=',$delete->id)->first();
+        if($capacity) {
+            $capacity->delete();
+        }
+
+        if($date != null) {
+        foreach($date as $dt) {
+            $dt->delete();
+        }
+    }
+
+        if($menu != null) {
+        foreach($menu as $mn) {
+            
+            $mn->delete();
+        }
+    }
+        if($images != null) {
+            foreach($images as $im) {
+                $image_path = public_path("banquet/{$im->path}");
+                if(File::exists($image_path)) {
+                    try{
+                        File::delete($image_path);
+                    }
+                    catch(\Exception $e) {
+                        return back()->with('fail','Error deleting the existing image');
+                    }
+                }
+                $im->delete();
+            }
+        }
+
+            $delete->delete();
+            Session::pull('loginEmail');
+
+        
+        return redirect()->to(route('login'))->with('success','Account has been successfully deleted');
+    }
+    
 }

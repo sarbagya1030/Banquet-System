@@ -24,7 +24,7 @@ Route::get('/registration',[CustomAuthenticationController::class,'registration'
 Route::post('/register-user',[CustomAuthenticationController::class,'registerUser'])->name('register-user');
 Route::post('/login-user',[CustomAuthenticationController::class,'loginUser'])->name('login-user');
 Route::get('/dashboard',[CustomAuthenticationController::class,'dash']) -> middleware('isLoggedIn');
-Route::get('/dashboardOwner',[CustomAuthenticationController::class,'dashOwner']) -> middleware('isLoggedIn');
+Route::get('/dashboardOwner',[CustomAuthenticationController::class,'dashOwner']) -> middleware('isLoggedIn') -> name('dashboardOwner');
 // Route::get('/dashboardOwner',[CustomAuthenticationController::class,'dashboard']) -> middleware('isLoggedIn');
 
 Route::get('/logout',[CustomAuthenticationController::class,'logout'])->name('logout');
@@ -46,8 +46,11 @@ Route::put('/updateProfile-owner',[upload_details::class,'profileUpdateOwner'])-
 
 Route::get('/dates-view',[upload_details::class,'dateView'])->name('dates-view');
 Route::get('/menu-view',[upload_details::class,'menuView'])->name('menu-view');
+Route::get('/capacity-view',[upload_details::class,'capacityView'])->name('capacity-view');
 
+Route::delete('/deleteImage-banquet/{id}',[upload_details::class,'deleteImages'])->name('deleteImage-banquet');
+Route::delete('/deleteDate-banquet/{id}',[upload_details::class,'deleteDates'])->name('deleteDate-banquet');
+Route::delete('/deleteFood-banquet/{id}',[upload_details::class,'deleteFoods'])->name('deleteFood-banquet');
+Route::delete('/deleteCapacity-banquet/{id}',[upload_details::class,'deleteCapacities'])->name('deleteCapacity-banquet');
 
-
-
-
+Route::delete('/deleteOwner-profile/{email}',[upload_details::class,'deleteownerProfile'])->name('deleteOwner-profile');

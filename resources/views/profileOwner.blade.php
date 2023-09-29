@@ -26,7 +26,8 @@
     {{-- UpdateProfile --}}
     <div class="mt-6 max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
         <h1 class="text-2xl font-semibold mb-4">Update Your Profile</h1>
-        <form action="profileUpdateUser" method="POST" class="space-y-4" enctype="multipart/form-data">
+        <form action="{{ route('updateProfile-owner') }}" method="POST" class="space-y-4"
+            enctype="multipart/form-data">
             @if (Session::has('success'))
                 <div role="alert" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3">
                     {{ Session::get('success') }}</div>

@@ -150,6 +150,18 @@ class CustomAuthenticationController extends Controller
     }
 
     public function dash() {
+        $details = DB::table('images')
+                             ->select('banquet_registers.*',
+                             'images.path',
+                             'dates.date',
+                             'menus.foodname','menus.type','menus.price',
+                             'capacities.banquet_capacity','capacities.twowheeler','capacities.fourwheeler')
+                             ->leftJoin('banquet_registers','banquet_registers.id','images.fk_banquet_id')
+                             ->leftJoin('dates','dates.fk_banquet_id','banquet_registers.id')
+                             ->leftJoin('menus','menus.fk_banquet_id','banquet_registers.id')
+                             ->leftJoin('capacities','capacities.fk_banquet_id','banquet_registers.id')
+                             ->get();
+       
         $data = array();
         $Users = array();
         $Banquet = banquetRegister::all();
@@ -158,7 +170,7 @@ class CustomAuthenticationController extends Controller
             $data = User::where('email','=',Session::get('loginEmail'))->first();
 
         }
-        return view('dashboard',compact('data','Banquet'));    
+        return view('dashboard',compact('data','Banquet','details'));    
     }
 
     public function dashOwner() {

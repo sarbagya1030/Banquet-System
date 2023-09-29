@@ -7,6 +7,7 @@ use App\Models\capacity;
 use App\Models\dates;
 use App\Models\menu;
 use App\Models\images;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -15,21 +16,6 @@ use Illuminate\Support\Facades\DB;
 
 class upload_details extends Controller
 {
-    public function detail() {
-        $details = DB::table('images')
-                             ->select('banquet_registers.*',
-                             'images.path',
-                             'dates.date',
-                             'menus.foodname','menus.type','menus.price',
-                             'capacities.banquet_capacity','capacities.twowheeler','capacities.fourwheeler')
-                             ->leftJoin('banquet_registers','banquet_registers.id','images.fk_banquet_id')
-                             ->leftJoin('dates','dates.fk_banquet_id','banquet_registers.id')
-                             ->leftJoin('menus','menus.fk_banquet_id','banquet_registers.id')
-                             ->leftJoin('capacities','capacities.fk_banquet_id','banquet_registers.id')
-                             ->get();
-        // dd($details);
-        return view('details',['details' => $details]);
-    }
 
     //food update
     public function menus(Request $request,$email) {
@@ -135,10 +121,63 @@ class upload_details extends Controller
         return view ("recordupdate");
     }
 
-
-    public function profileUpdateOwner() {
+    public function viewprofileOwner() {
         $value= banquetRegister::where('email','=',Session::get('loginEmail'))->first();
+        return view ("profileOwner",compact('value'));  
+    }
 
-        return view ("profileOwner",compact('value'));
+
+
+    public function profileUpdateOwner(Request $request) {
+        $request->validate([
+            'banquetname' => 'required',
+            'email' => 'required|email',
+            'location' => 'required',
+            'registrationNumber' => 'required',
+            'licenseNumber' => 'required',
+            'contactNumber' => 'required',
+            'description' => '',   
+        ]);
+
+        $value= banquetRegister::where('email','=',Session::get('loginEmail'))->first();
+        
+        if($value) 
+        {
+            $value->banquetname = $request->banquetname;
+            $value->email = $request->email;
+            $value->location = $request->location;
+            $value->registrationNumber = $request->registrationNumber;
+            $value->licenseNumber = $request->licenseNumber;
+            $value->contactNumber = $request->contactNumber;
+            $value->description = $request->description;
+
+            if($request->filled('password')) {
+                $request->validate([
+                    'password'=> 'min:8|confirmed',
+                ]);
+                $value->password = Hash::make($request->password);
+        }
+        $value->update();
+        return back()->with('success','You have updated profile successfully');
+    }else {
+        return back()->with('fail','Something went wrong');
+    }
+    }
+
+    public function deleteuserProfile($email) {
+        $delete = User::where('email','=',$email)->first();
+        $delete->delete();
+
+            Session::pull('loginEmail');
+
+        
+        return redirect()->to(route('login'))->with('success','Account has been successfully deleted');
+    }
+
+    public function dateView(Request $request) {
+        $row = banquetRegister::where('email','=',Session::get('loginEmail'))->first();
+        $select= dates::where('fk_banquet_id','=',$row->id)->get();
+
+        return view('date',compact('select'));
     }
 }

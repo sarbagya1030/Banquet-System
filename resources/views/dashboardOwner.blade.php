@@ -70,7 +70,8 @@
             <!-- Available Dates Section -->
             <div class="mb-4 ml-0 max-w-full mx-auto bg-white rounded-lg shadow-md p-6">
                 <div id="icons" class="flex justify-end">
-                    <a href="#" class="text-blue-500 hover:text-blue-700 mr-2"> <!-- Edit Icon -->
+                    <a href="{{ route('dates-view') }}" class="text-blue-500 hover:text-blue-700 mr-2">
+                        <!-- Edit Icon -->
                         <i class="fas fa-edit"></i>
                     </a>
                 </div>
@@ -81,6 +82,12 @@
             </div>
         @else
             <div class="mb-4 ml-0 max-w-full mx-auto bg-white rounded-lg shadow-md p-6">
+                <div id="icons" class="flex justify-end">
+                    <a href="{{ route('create-record') }}" class="text-blue-500 hover:text-blue-700 mr-2">
+                        <!-- Edit Icon -->
+                        <i class="fas fa-edit"></i>
+                    </a>
+                </div>
                 <h3 class="text-2xl font-semibold mb-4">Available Dates</h3>
                 <p>No data</p>
             </div>
@@ -272,7 +279,7 @@
             <!-- User Profile Header -->
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-2xl font-semibold">User Profile</h2>
-                <a href="{{ route('updateProfile-owner') }}" class="text-blue-500 hover:underline">Edit Profile</a>
+                <a href="{{ route('profile-owner') }}" class="text-blue-500 hover:underline">Edit Profile</a>
             </div>
 
             <!-- Profile Information -->

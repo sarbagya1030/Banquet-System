@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Carbon;
+use Illuminate\Http\RedirectResponse;
+
 
 class CustomAuthenticationController extends Controller
 {
@@ -150,31 +155,33 @@ class CustomAuthenticationController extends Controller
     }
 
     public function dash() {
-        $details = DB::table('images')
-                             ->select('banquet_registers.*',
-                             'images.path',
-                             'dates.date',
-                             'menus.foodname','menus.type','menus.price',
-                             'capacities.banquet_capacity','capacities.twowheeler','capacities.fourwheeler')
-                             ->leftJoin('banquet_registers','banquet_registers.id','images.fk_banquet_id')
-                             ->leftJoin('dates','dates.fk_banquet_id','banquet_registers.id')
-                             ->leftJoin('menus','menus.fk_banquet_id','banquet_registers.id')
-                             ->leftJoin('capacities','capacities.fk_banquet_id','banquet_registers.id')
-                             ->get();
-       
         $data = array();
-        $Users = array();
-        $Banquet = banquetRegister::all();
+        $user = User::where('email','=',Session::get('loginEmail'))->first();
+        $data = banquetRegister::all();
+        $capacity = capacity::all();
+        $dates = dates::all();
+        $image = images::all();
+        $menu = menu::all();
+        
+        return view('dashboard',compact('data','user','capacity','dates','image','menu'));    
 
-        if(Session::has('loginEmail')) {
-            $data = User::where('email','=',Session::get('loginEmail'))->first();
+        // $details = DB::table('images')
+        //                      ->select('banquet_registers.*',
+        //                      'images.path',
+        //                      'dates.date',
+        //                      'menus.foodname','menus.type','menus.price',
+        //                      'capacities.banquet_capacity','capacities.twowheeler','capacities.fourwheeler')
+        //                      ->leftJoin('banquet_registers','banquet_registers.id','images.fk_banquet_id')
+        //                      ->leftJoin('dates','dates.fk_banquet_id','banquet_registers.id')
+        //                      ->leftJoin('menus','menus.fk_banquet_id','banquet_registers.id')
+        //                      ->leftJoin('capacities','capacities.fk_banquet_id','banquet_registers.id')
+        //                      ->get();
 
-        }
-        return view('dashboard',compact('data','Banquet','details'));    
+        // $Users = array();
+        // $Banquet = banquetRegister::all();
     }
 
     public function dashOwner() {
-
         $data = array();
         $dinner = null;
         $snacks = null;
@@ -284,5 +291,82 @@ class CustomAuthenticationController extends Controller
         }else{
                 return back()->with('fail','Something went wrong');
             }
+        }
+
+
+        public function emailVerifyGet()
+        {
+            return view('auth.emailVerify');
+        }
+
+    
+        public function passwordResetGet($token)
+        {
+            return view('auth.changePassword', compact('token'));
+        }
+
+
+
+
+
+        public function emailVerifyPost(Request $request)
+        {
+            $request->validate([
+                'email' => 'required|email',
+            ]);
+    
+            $temp1 = User::where('email', '=', $request->email)->first();
+            $temp2 = banquetRegister::where('email', '=', $request->email)->first();
+    
+    
+            if ($temp1 || $temp2) {
+    
+                $token = Str::random(64);
+                DB::table('password_reset_tokens')->insert([
+                    'email' => $request->email,
+                    'token' => $token,
+                    'created_at' => Carbon::now()
+                ]);
+                Mail::send('auth.forget', ['token' => $token], function ($message) use ($request) {
+                    $message->to($request->email);
+                    $message->subject('Reset Password');
+                });
+    
+                return redirect()->to(route('email.verify.get'))->with('success', 'Please check your inbox');
+            }
+    
+            return back()->with('fail', 'Please enter registered Email');
+        }
+
+
+
+        public function passwordResetPost(Request $request)
+        {
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required|min:8|confirmed',
+            ]);
+            $temp1 = User::where('email', '=', $request->email)->first();
+            $temp2 = banquetRegister::where('email', '=', $request->email)->first();
+    
+            $data = DB::table('password_reset_tokens')->where([
+                'email' => $request->email,
+                'token' => $request->token
+            ])->first();
+    
+            if ($data && $temp1) {
+                User::where('email', '=', $request->email)->update(['password' => Hash::make($request->password)]);
+                DB::table('password_reset_tokens')->where('email', '=', $request->email)->delete();
+                return redirect()->to(route('login'))->with('success', 'Successfully changed password!');
+            } else if ($data && $temp2) {
+    
+                banquetRegister::where('email', '=', $request->email)->update(['password' => Hash::make($request->password)]);
+                DB::table('password_reset_tokens')->where('email', '=', $request->email)->delete();
+                return redirect()->to(route('login'))->with('success', 'Successfully changed password!');
+            } else {
+                DB::table('password_reset_tokens')->where('email', '=', $request->email)->delete();
+                return back()->with('fail', 'Please try again');
+            }
+    
         }
     }

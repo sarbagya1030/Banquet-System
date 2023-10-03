@@ -54,3 +54,8 @@ Route::delete('/deleteFood-banquet/{id}',[upload_details::class,'deleteFoods'])-
 Route::delete('/deleteCapacity-banquet/{id}',[upload_details::class,'deleteCapacities'])->name('deleteCapacity-banquet');
 
 Route::delete('/deleteOwner-profile/{email}',[upload_details::class,'deleteownerProfile'])->name('deleteOwner-profile');
+
+Route::get('/emailVerify', [CustomAuthenticationController::class, 'emailVerifyGet'])->name('email.verify.get');
+Route::post('/email-verify', [CustomAuthenticationController::class, 'emailVerifyPost'])->name('email.verify.post');
+Route::get('/password-reset/{token}', [CustomAuthenticationController::class, 'passwordResetGet'])->name('password.reset.get');
+Route::post('/password-reset', [CustomAuthenticationController::class, 'passwordResetPost'])->name('password.reset.post');

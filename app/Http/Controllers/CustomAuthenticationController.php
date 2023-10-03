@@ -259,7 +259,7 @@ class CustomAuthenticationController extends Controller
             }
             if($request->filled('bio')) {
                 $request->validate([
-                    'bio' => 'max:100|string',
+                    'bio' => 'max:1000|string',
                 ]);
                 $temp1->bio = $request->bio;
                 // $temp1->update();

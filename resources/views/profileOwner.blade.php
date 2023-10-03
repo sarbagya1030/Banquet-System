@@ -133,7 +133,7 @@
 
             <div>
                 <button type="submit"
-                    class="w-full bg-blue-400 text-white py-2 px-4 rounded-md hover:bg-black focus:outline-none focus:ring focus:border-blue-300">
+                    class="w-full bg-blue-400 text-white py-2 px-4 rounded-md hover:bg-black focus:outline-none focus:ring focus:border-blue-300 mb-4">
                     Update Profile
                 </button>
             </div>

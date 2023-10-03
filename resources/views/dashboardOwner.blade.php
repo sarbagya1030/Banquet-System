@@ -51,22 +51,28 @@
 
 
             <!-- Images Section -->
-            <div class="flex justify-center flex-nowrap overflow-x-auto" id="imagescroll">
+            <div class="flex justify-center" id="imagescroll">
                 @if ($image != null)
-                    @foreach ($image as $im)
-                        <div class="mx-4 relative"> <!-- Added relative positioning -->
-                            <img src="{{ asset('/banquet/' . $im->path) }}" alt="Image 1" class="rounded-md"
-                                style="height: 200px; width: 400px">
-                            <form action="{{ route('deleteImage-banquet', $im->id) }}" method="POST">
-                                @csrf
-                                @method('delete')
-                                <button type="submit"
-                                    class="absolute top-2 right-2 text-white cursor-pointer hover:text-black transition duration-300 ease-in-out">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </form>
+
+                    <div class="overflow-x-auto self-stretch">
+                        <div class="flex flex-row flex-nowrap gap-8 ">
+                            @foreach ($image as $im)
+                                <div class="mx-4 relative w-full h-full"> <!-- Added relative positioning -->
+                                    <img src="{{ asset('/banquet/' . $im->path) }}" alt="Image 1"
+                                        class="rounded-md w-full h-full">
+                                    <form action="{{ route('deleteImage-banquet', $im->id) }}" method="POST">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit"
+                                            class="absolute top-2 right-2 text-white cursor-pointer hover:text-black transition duration-300 ease-in-out">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <!-- Repeat this grid item for each image -->
+                            @endforeach
                         </div>
-                    @endforeach
+                    </div>
                     <!-- Add Button -->
                     <a href="create-record"
                         class="w-10 h-10 flex items-center justify-center bg-blue-500 text-white rounded-full">

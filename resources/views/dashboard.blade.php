@@ -29,19 +29,61 @@
     </div>
 
 
+
+
     <div class="container mx-auto p-8">
         <h1 class="text-3xl font-semibold mb-4">Banquet Listings</h1>
 
-        <!-- Search Bar -->
+        {{-- <!-- Search Bar -->
         <div class="mb-4">
             <input type="text" class="border rounded py-2 px-4 w-full" placeholder="Search banquets...">
+        </div> --}}
+
+
+        <div class="flex space-x-4 mb-6">
+            <!-- Location Dropdown -->
+            <div class="relative">
+                <select
+                    class="block appearance-none bg-white border border-gray-300 hover:border-gray-500 px-4 py-2 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                    <option value="">Select Location</option>
+                    <option value="location1">Location 1</option>
+                    <option value="location2">Location 2</option>
+                    <!-- Add more location options as needed -->
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M9 11V5a1 1 0 112 0v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H5a1 1 0 110-2h6z" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Capacity Dropdown -->
+            <div class="relative">
+                <select
+                    class="block appearance-none bg-white border border-gray-300 hover:border-gray-500 px-4 py-2 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                    <option value="">Select Capacity</option>
+                    <option value="capacity1">Capacity 1</option>
+                    <option value="capacity2">Capacity 2</option>
+                    <!-- Add more capacity options as needed -->
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M9 11V5a1 1 0 112 0v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H5a1 1 0 110-2h6z" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Search Button -->
+            <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg">
+                Search
+            </button>
         </div>
+
 
         <!-- Banquet Cards (Sample Data) -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Sample Banquet Card 1 -->
-
-            @if (!@empty($data))
+            @if (!empty($data))
                 @foreach ($data as $dat)
                     @php
                         $pic = images::where('fk_banquet_id', '=', $dat->id)->first();
@@ -56,6 +98,22 @@
                             <img src="images/logo.png" alt="Placeholder Image" class="h-12 w-12">
                         @endif
                         <h2 class="text-xl font-semibold">{{ $dat->banquetname }}</h2>
+
+                        <!-- Rating Stars -->
+                        <div class="flex items-center mt-2">
+                            <span class="text-yellow-400">
+                                @php $rating = $dat->rating; @endphp
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($rating >= $i)
+                                        <i class="fas fa-star"></i>
+                                    @else
+                                        <i class="far fa-star"></i>
+                                    @endif
+                                @endfor
+                            </span>
+                            <span class="ml-2">{{ $dat->rating }}</span>
+                        </div>
+
                         <div class="mt-8">
                             <span class="text-blue-600">
                                 <i class="fas fa-envelope"></i>
@@ -63,7 +121,6 @@
                             <a href="mailto:{{ $dat->email }}"
                                 class="text-blue-600 hover:underline">{{ $dat->email }}</a>
                         </div>
-
                         <div class="mt-4">
                             <span class="text-green-600">
                                 <i class="fas fa-phone"></i>
@@ -71,7 +128,6 @@
                             <a href="tel:{{ $dat->contactNumber }}"
                                 class="text-blue-600 hover:underline">{{ $dat->contactNumber }}</a>
                         </div>
-
                         <div class="mt-4">
                             <span class="text-red-600">
                                 <i class="fas fa-map-marker-alt"></i>
@@ -84,11 +140,13 @@
                     </div>
                 @endforeach
             @endif
-
-
             <!-- Add more banquet cards as needed -->
         </div>
+
     </div>
+
+
+
 </body>
 
 
@@ -183,19 +241,24 @@
 
     {{-- Profile Dialogue Box --}}
 <div id="profileDialog"
-    class="fixed top-0 right-0 h-full w-80 bg-white shadow-md transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-scroll">
+    class="fixed top-0 right-0 h-full w-1/4 bg-white shadow-md transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-scroll">
     <div class="p-4">
         <div class="mt-6 mb-6  max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
-            <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center justify-center mb-4">
                 <div class="flex items-center space-x-4">
-                    <img src="{{ asset('/profile_pictures/' . $user->profile) }}" alt="User Avatar"
-                        class="w-16 h-16 rounded-full">
-                    <div>
-                        <h1 class="text-2xl font-semibold">{{ $user->firstname }}</< /h1>
+                    <!-- Centered Image -->
+                    <div class="flex flex-col items-center"> <!-- Added flex-col class -->
+                        <img src="{{ asset('/profile_pictures/' . $user->profile) }}" alt="User Avatar"
+                            class="w-16 h-16 rounded-full mb-2"> <!-- Added mb-2 for margin below the image -->
+                        <!-- User Name -->
+                        <div>
+                            <h1 class="text-2xl font-semibold">{{ $user->firstname }} {{ $user->lastname }}</h1>
+                        </div>
                     </div>
                 </div>
-
             </div>
+
+
             <hr class="my-4">
             <div>
                 <h2 class="text-lg font-semibold">About Me</h2>

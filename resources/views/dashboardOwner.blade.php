@@ -53,31 +53,30 @@
             <!-- Images Section -->
             <div class="flex justify-center" id="imagescroll">
                 @if ($image != null)
-
-                    <div class="overflow-x-auto self-stretch">
-                        <div class="flex flex-row flex-nowrap gap-8 ">
-                            @foreach ($image as $im)
-                                <div class="mx-4 relative w-full h-full"> <!-- Added relative positioning -->
-                                    <img src="{{ asset('/banquet/' . $im->path) }}" alt="Image 1"
-                                        class="rounded-md w-full h-full">
-                                    <form action="{{ route('deleteImage-banquet', $im->id) }}" method="POST">
-                                        @csrf
-                                        @method('delete')
-                                        <button type="submit"
-                                            class="absolute top-2 right-2 text-white cursor-pointer hover:text-black transition duration-300 ease-in-out">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                                <!-- Repeat this grid item for each image -->
-                            @endforeach
-                        </div>
+                    {{-- <div class="overflow-x-auto self-stretch"> --}}
+                    <div class="flex overflow-x-auto">
+                        @foreach ($image as $im)
+                            <div class="mx-4 relative max-w-[20%] flex-shrink-0">
+                                <img src="{{ asset('/banquet/' . $im->path) }}" alt="Image 1"
+                                    class="rounded-md w-full h-full">
+                                <form action="{{ route('deleteImage-banquet', $im->id) }}" method="POST">
+                                    @csrf
+                                    @method('delete')
+                                    <button type="submit"
+                                        class="absolute top-2 right-2 text-white cursor-pointer hover:text-black transition duration-300 ease-in-out">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        @endforeach
                     </div>
+                    {{-- </div> --}}
                     <!-- Add Button -->
-                    <a href="create-record"
-                        class="w-10 h-10 flex items-center justify-center bg-blue-500 text-white rounded-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
+                    <a href="create-record" class="w-10 h-10 flex items-center justify-center rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" style="width:2.5rem; height:2.5rem">
+                            <circle cx="12" cy="12" r="10" fill="none"
+                                stroke-dasharray="4 4" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
                             </path>
                         </svg>

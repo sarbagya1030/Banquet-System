@@ -277,8 +277,8 @@ class upload_details extends Controller
     }
 
 
-    public function booknow() {
-        return view('booking');
+    public function booknow($id) {
+        return view('booking',compact('id'));
     }
 
 

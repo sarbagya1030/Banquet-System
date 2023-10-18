@@ -60,6 +60,6 @@ Route::post('/email-verify', [CustomAuthenticationController::class, 'emailVerif
 Route::get('/password-reset/{token}', [CustomAuthenticationController::class, 'passwordResetGet'])->name('password.reset.get');
 Route::post('/password-reset', [CustomAuthenticationController::class, 'passwordResetPost'])->name('password.reset.post');
 
-Route::get('/booking',[upload_details::class,'booknow'])->name('booking');
+Route::get('/booking/{id}',[upload_details::class,'booknow'])->name('booking');
 
 Route::post('/book-order/{id}',[upload_details::class,'bookingform'])->name('book-order');

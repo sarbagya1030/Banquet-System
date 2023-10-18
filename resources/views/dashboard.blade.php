@@ -1,8 +1,3 @@
-@php
-    use App\Models\images;
-@endphp
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.7/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <title>Dashboard</title>
+    <title>Booking</title>
 </head>
 
 <body class="bg-gray-100">
@@ -27,208 +22,101 @@
             </ul>
         </div>
     </div>
-
-
-
-
     <div class="container mx-auto p-8">
-        <h1 class="text-3xl font-semibold mb-4">Banquet Listings</h1>
+        <h1 class="text-3xl font-semibold mb-4">Banquet Booking</h1>
 
-        <div class="flex space-x-4 mb-6">
-            <!-- Location Dropdown -->
-            <div class="relative">
-                <select
-                    class="block appearance-none bg-white border border-gray-300 hover:border-gray-500 px-4 py-2 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                    <option value="">Select Location</option>
-                    <option value="location1">Location 1</option>
-                    <option value="location2">Location 2</option>
-                    <!-- Add more location options as needed -->
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                        <path d="M9 11V5a1 1 0 112 0v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H5a1 1 0 110-2h6z" />
-                    </svg>
-                </div>
-            </div>
-
-            <!-- Capacity Dropdown -->
-            <div class="relative">
-                <select
-                    class="block appearance-none bg-white border border-gray-300 hover:border-gray-500 px-4 py-2 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                    <option value="">Select Capacity</option>
-                    <option value="capacity1">Capacity 1</option>
-                    <option value="capacity2">Capacity 2</option>
-                    <!-- Add more capacity options as needed -->
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                        <path d="M9 11V5a1 1 0 112 0v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H5a1 1 0 110-2h6z" />
-                    </svg>
-                </div>
-            </div>
-
-            <!-- Search Button -->
-            <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg">
-                Search
-            </button>
-        </div>
-
-
-        <!-- Banquet Cards (Sample Data) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Sample Banquet Card 1 -->
-            @if (!empty($data))
-                @foreach ($data as $dat)
-                    @php
-                        $pic = images::where('fk_banquet_id', '=', $dat->id)->first();
-                        // dd($pic->path);
-                    @endphp
-                    <div class="bg-white rounded shadow-md p-4">
-                        @if ($pic)
-                            <!-- Check if $pic is not null -->
-                            <img src="{{ asset('/banquet/' . $pic->path) }}" alt="Banquet Image" class="rounded-md"
-                                style="height: 200px; width: 400px">
-                        @else
-                            <img src="images/logo.png" alt="Placeholder Image" class="h-12 w-12">
-                        @endif
-                        <h2 class="text-xl font-semibold">{{ $dat->banquetname }}</h2>
-
-                        <!-- Rating Stars -->
-                        <div class="flex items-center mt-2">
-                            <span class="text-yellow-400">
-                                @php $rating = $dat->rating; @endphp
-                                @for ($i = 1; $i <= 5; $i++)
-                                    @if ($rating >= $i)
-                                        <i class="fas fa-star"></i>
-                                    @else
-                                        <i class="far fa-star"></i>
-                                    @endif
-                                @endfor
-                            </span>
-                            <span class="ml-2">{{ $dat->rating }}</span>
-                        </div>
-
-                        <div class="mt-8">
-                            <span class="text-blue-600">
-                                <i class="fas fa-envelope"></i>
-                            </span>
-                            <a href="mailto:{{ $dat->email }}"
-                                class="text-blue-600 hover:underline">{{ $dat->email }}</a>
-                        </div>
-                        <div class="mt-4">
-                            <span class="text-green-600">
-                                <i class="fas fa-phone"></i>
-                            </span>
-                            <a href="tel:{{ $dat->contactNumber }}"
-                                class="text-blue-600 hover:underline">{{ $dat->contactNumber }}</a>
-                        </div>
-                        <div class="mt-4">
-                            <span class="text-red-600">
-                                <i class="fas fa-map-marker-alt"></i>
-                            </span>
-                            <a href="{{ $dat->location }}"
-                                class="text-blue-600 hover:underline">{{ $dat->location }}</a>
-                        </div>
-                        <a href="{{ route('booking') }}"><button
-                                class="bg-blue-500 text-white hover:bg-blue-600 py-2 px-4 mt-2 rounded-full">Book
-                                Now</button></a>
-                    </div>
-                @endforeach
+        <!-- Booking Form -->
+        <form class="bg-white rounded p-4 shadow-md" action="{{ route('booking', $id) }}" method="POST">
+            @if (Session::has('success'))
+                <div role="alert" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3">
+                    {{ Session::get('success') }}</div>
             @endif
-        </div>
+            @if (Session::has('fail'))
+                <div role="alert" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                    {{ Session::get('fail') }}</div>
+            @endif
+            @csrf
+            @method('PUT')
+            <div class="mb-4">
+                <label for="firstname" class="block text-sm font-medium text-gray-700">Firstname</label>
+                <input type="text" id="firstname" name="firstname" class="form-input">
+                <span class=" text-red-600">
+                    @error('firstname')
+                        {{ $message }}
+                    @enderror
+                </span>
+            </div>
 
-    </div>
+            <div class="mb-4">
+                <label for="lastname" class="block text-sm font-medium text-gray-700">Lastname</label>
+                <input type="text" id="lastname" name="lastname" class="form-input">
+                <span class=" text-red-600">
+                    @error('lastname')
+                        {{ $message }}
+                    @enderror
+                </span>
+            </div>
 
-    {{-- Profile Dialogue Box --}}
-    <div id="profileDialog"
-        class="fixed top-0 right-0 h-full w-1/4 bg-white shadow-md transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-scroll">
-        <div class="p-4">
-            <div class="mt-6 mb-6  max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
-                <div class="flex items-center justify-center mb-4">
-                    <div class="flex items-center space-x-4">
-                        <!-- Centered Image -->
-                        <div class="flex flex-col items-center"> <!-- Added flex-col class -->
-                            <img src="{{ asset('/profile_pictures/' . $user->profile) }}" alt="User Avatar"
-                                class="w-16 h-16 rounded-full mb-2"> <!-- Added mb-2 for margin below the image -->
-                            <!-- User Name -->
-                            <div>
-                                <h1 class="text-2xl font-semibold">{{ $user->firstname }} {{ $user->lastname }}</h1>
-                            </div>
-                        </div>
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" name="email" class="form-input">
+                <span class=" text-red-600">
+                    @error('email')
+                        {{ $message }}
+                    @enderror
+                </span>
+            </div>
+
+            <div class="mb-4">
+                <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                <input type="tel" id="phone" name="phone" class="form-input">
+                <span class=" text-red-600">
+                    @error('phone')
+                        {{ $message }}
+                    @enderror
+                </span>
+            </div>
+
+            <div class="mb-4">
+                <label for="date" class="block text-sm font-medium text-gray-700">Date</label>
+
+                <!-- Dropdown Button with Options -->
+                <div class="relative inline-block w-full text-gray-700">
+                    <div class="relative">
+                        <select id="date" name="date"
+                            class="block appearance-none w-full bg-white border border-gray-300 px-4 py-2 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                            <option value="">Select a Date</option>
+                            <!-- You can populate available dates dynamically here -->
+                            <option value="2023-10-10">October 10, 2023</option>
+                            <option value="2023-10-15">October 15, 2023</option>
+                            <option value="2023-10-20">October 20, 2023</option>
+                            <!-- Add more options based on available dates -->
+                        </select>
+                    </div>
+                    <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                        <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" stroke-linecap="round"
+                            stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M9 5l7 7-7 7"></path>
+                        </svg>
                     </div>
                 </div>
 
-
-                <hr class="my-4">
-                <div>
-                    <h2 class="text-lg font-semibold">About Me</h2>
-                    <p class="text-gray-700">{{ $user->bio }}</p>
-                </div>
-
-                <div class="mt-4">
-                    <h2 class="text-lg font-semibold">Contact Information</h2>
-                    <ul class="list-disc list-inside text-gray-700">
-                        <li>Email: {{ $user->email }}</li>
-                        <li>Contact Number: {{ $user->email }}</li>
-                    </ul>
-                </div>
+                <span class="text-red-600">
+                    @error('date')
+                        {{ $message }}
+                    @enderror
+                </span>
             </div>
 
-            <button id="closeProfile" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12" />
-                </svg>
+
+            <div class="mb-4">
+                <label for="guests" class="block text-sm font-medium text-gray-700">Number of Guests</label>
+                <input type="number" id="guests" name="guests" class="form-input">
+            </div>
+            <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg" type="submit">Submit
             </button>
-
-            <div class="flex justify-center">
-                <a href="profile"
-                    class="ml-2 px-3 py-2 bg-blue-400 text-white rounded-lg hover:bg-black focus:outline-none focus:ring focus:border-blue-300">
-                    Edit Profile
-                </a>
-            </div>
-        </div>
-
-
-
-
-        <style>
-            /* Styles for the profile dialog container */
-            #profileDialog {
-                z-index: 9999;
-                /* Ensure it appears above other content */
-            }
-
-            /* Initial position of the profile dialog */
-            .translate-x-full {
-                transform: translateX(100%);
-            }
-        </style>
-
-
-
-        <script>
-            // Function to open the profile dialog
-            function openProfile() {
-                const profileDialog = document.getElementById("profileDialog");
-                profileDialog.classList.remove("translate-x-full");
-            }
-
-            // Function to close the profile dialog
-            function closeProfile() {
-                const profileDialog = document.getElementById("profileDialog");
-                profileDialog.classList.add("translate-x-full");
-            }
-
-            // Add event listeners to open and close the profile dialog
-            const openProfileLink = document.getElementById("openProfile");
-            openProfileLink.addEventListener("click", openProfile);
-
-            const closeProfileButton = document.getElementById("closeProfile");
-            closeProfileButton.addEventListener("click", closeProfile);
-        </script>
-
+        </form>
+    </div>
 </body>
 
 </html>

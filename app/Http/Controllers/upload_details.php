@@ -283,7 +283,7 @@ class upload_details extends Controller
 
 
 
-    public function bookingform(Request $request) {
+    public function bookingform(Request $request,$id) {
         $request->validate([
             'firstname' => 'required',
             'lastname' => 'required',
@@ -291,13 +291,13 @@ class upload_details extends Controller
             'phone' => 'required',
             'date' => 'required',
             'guests' => 'required',
-            
+
         ]);
 
         $temp1= User::where('email','=',Session::get('loginEmail'))->first();
 
-        // $data = dates::where('','','')->
-        // $capa = capacity::where('fk_banquet_id','=','')->first();
+        $data = dates::where("fk_banquet_id",$id)->get();
+        $capa = capacity::where('fk_banquet_id',$id)->first();
         // return view ("booking",compact('temp1'));
 
         if($temp1)
@@ -305,7 +305,7 @@ class upload_details extends Controller
             $temp1->firstname = $request->firstname;
             $temp1->lastname = $request->lastname;
             $temp1->email = $request->email;
-            
+
             $temp1->save();
 
 
@@ -313,7 +313,7 @@ class upload_details extends Controller
         }else{
                 return back()->with('fail','Something went wrong');
             }
-         
+
 
     }
     

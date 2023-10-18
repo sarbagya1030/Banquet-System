@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\banquetRegister;
 use App\Models\capacity;
 use App\Models\dates;
@@ -275,6 +274,47 @@ class upload_details extends Controller
 
         
         return redirect()->to(route('login'))->with('success','Account has been successfully deleted');
+    }
+
+
+    public function booknow() {
+        return view('booking');
+    }
+
+
+
+    public function bookingform(Request $request) {
+        $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'date' => 'required',
+            'guests' => 'required',
+            
+        ]);
+
+        $temp1= User::where('email','=',Session::get('loginEmail'))->first();
+
+        // $data = dates::where('','','')->
+        // $capa = capacity::where('fk_banquet_id','=','')->first();
+        // return view ("booking",compact('temp1'));
+
+        if($temp1)
+        {
+            $temp1->firstname = $request->firstname;
+            $temp1->lastname = $request->lastname;
+            $temp1->email = $request->email;
+            
+            $temp1->save();
+
+
+                return back()->with('success','Your booking has been recorded');
+        }else{
+                return back()->with('fail','Something went wrong');
+            }
+         
+
     }
     
 }

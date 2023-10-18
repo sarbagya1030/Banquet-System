@@ -26,7 +26,7 @@
         <h1 class="text-3xl font-semibold mb-4">Banquet Booking</h1>
 
         <!-- Booking Form -->
-        <form class="bg-white rounded p-4 shadow-md">
+        <form class="bg-white rounded p-4 shadow-md" action="{{ route('booking', $id) }}" method="POST">
             @if (Session::has('success'))
                 <div role="alert" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3">
                     {{ Session::get('success') }}</div>

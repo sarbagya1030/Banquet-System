@@ -72,6 +72,7 @@ class CustomAuthenticationController extends Controller
             'licenseNumber' => 'required',
             'contactNumber' => 'required',
             'description' => 'required',
+            'bookingamount' => 'required',
             'password'=> 'required|min:8|confirmed',
             // 'password_confirmation' => 'required|min:8'
         ]);
@@ -88,6 +89,7 @@ class CustomAuthenticationController extends Controller
         $banquet_registers->licenseNumber = $request->licenseNumber;
         $banquet_registers->contactNumber = $request->input('contactNumber');
         $banquet_registers->description = $request->description;
+        $banquet_registers->book_amount = $request->bookingamount;
         $banquet_registers->password = Hash::make($request->password);
         // $user->confirm_password = $request->password_confirmation;
         $res = $banquet_registers->save();
@@ -162,8 +164,17 @@ class CustomAuthenticationController extends Controller
         $dates = dates::all();
         $image = images::all();
         $menu = menu::all();
+
+        $results = Session::get('results');
+        Session::pull('results');
+
+        if(isset($results)){
+            return view('dashboard',compact('data','user','capacity','dates','image','menu','results'));    
+        }
+        else{
+                return view('dashboard',compact('data','user','capacity','dates','image','menu'));
+        }
         
-        return view('dashboard',compact('data','user','capacity','dates','image','menu'));    
 
         // $details = DB::table('images')
         //                      ->select('banquet_registers.*',

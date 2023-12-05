@@ -16,7 +16,7 @@
         <div class="container mx-auto flex justify-between items-center">
             <div><img src="images/logo.png" class="h-12 w-12" alt="logo"></div>
             <ul class="flex space-x-4">
-                <li><a href="dashboardOwner" class="hover:underline">Home</a></li>
+                <li><a href="dashboard" class="hover:underline">Home</a></li>
                 {{-- <li><a href="#" id="profile-link" class="hover:underline">Profile</a></li> --}}
                 <li><a href="logout" class="hover:underline">Logout</a></li>
             </ul>
@@ -149,7 +149,8 @@
                 <div class="max-w-2xl mx-auto mt-8 p-6 bg-white shadow-md rounded-md">
                     <h2 class="text-xl font-semibold mb-4 cursor-pointer">Banquet Capacity</h2>
 
-                    <form id="capacity" method="POST" action="{{ route('capacity', Session::get('loginEmail')) }}">
+                    <form id="capacity" method="POST"
+                        action="{{ route('capacity', Session::get('loginEmail')) }}">
                         @csrf
                         <div class="mb-4">
                             <label for="banquet_capacity" class="block text-gray-700 font-semibold mb-2">Banquet

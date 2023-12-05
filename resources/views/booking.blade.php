@@ -14,11 +14,11 @@
     <!-- Navigation Bar -->
     <div class="p-4 text-white" style="background-image: linear-gradient(115deg, #00294A,#0F0E12);">
         <div class="container mx-auto flex justify-between items-center">
-            <div><img src="images/logo.png" class="h-12 w-12" alt="logo"></div>
+            <div><img src="{{ asset('images/logo.png') }}" class="h-12 w-12" alt="logo"></div>
             <ul class="flex space-x-4">
-                <li><a href="dashboard" class="hover:underline">Home</a></li>
-                <li><a href="#" id="openProfile" class="hover:underline">Profile</a></li>
-                <li><a href="logout" class="hover:underline">Logout</a></li>
+                <li><a href="{{ route('dashboard') }}" class="hover:underline">Home</a></li>
+                {{-- <li><a href="#" id="openProfile" class="hover:underline">Profile</a></li> --}}
+                <li><a href="{{ route('logout') }}" class="hover:underline">Logout</a></li>
             </ul>
         </div>
     </div>
@@ -26,7 +26,7 @@
         <h1 class="text-3xl font-semibold mb-4">Banquet Booking</h1>
 
         <!-- Booking Form -->
-        <form class="bg-white rounded p-4 shadow-md" action="{{ route('booking', $id) }}" method="POST">
+        <form class="bg-white rounded p-4 shadow-md" action="{{ route('book-order', $id) }}" method="POST">
             @if (Session::has('success'))
                 <div role="alert" class="bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3">
                     {{ Session::get('success') }}</div>
@@ -36,10 +36,9 @@
                     {{ Session::get('fail') }}</div>
             @endif
             @csrf
-            @method('PUT')
             <div class="mb-4">
                 <label for="firstname" class="block text-sm font-medium text-gray-700">Firstname</label>
-                <input type="text" id="firstname" name="firstname" class="form-input">
+                <input type="text" id="firstname" name="firstname" class="form-input" value="{{ $user->firstname }}">
                 <span class=" text-red-600">
                     @error('firstname')
                         {{ $message }}
@@ -49,7 +48,7 @@
 
             <div class="mb-4">
                 <label for="lastname" class="block text-sm font-medium text-gray-700">Lastname</label>
-                <input type="text" id="lastname" name="lastname" class="form-input">
+                <input type="text" id="lastname" name="lastname" class="form-input" value="{{ $user->lastname }}">
                 <span class=" text-red-600">
                     @error('lastname')
                         {{ $message }}
@@ -59,7 +58,7 @@
 
             <div class="mb-4">
                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input type="email" id="email" name="email" class="form-input">
+                <input type="email" id="email" name="email" class="form-input" value="{{ $user->email }}">
                 <span class=" text-red-600">
                     @error('email')
                         {{ $message }}
@@ -85,12 +84,9 @@
                     <div class="relative">
                         <select id="date" name="date"
                             class="block appearance-none w-full bg-white border border-gray-300 px-4 py-2 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                            <option value="">Select a Date</option>
-                            <!-- You can populate available dates dynamically here -->
-                            <option value="2023-10-10">October 10, 2023</option>
-                            <option value="2023-10-15">October 15, 2023</option>
-                            <option value="2023-10-20">October 20, 2023</option>
-                            <!-- Add more options based on available dates -->
+                            @foreach ($date as $dat)
+                                <option value="{{ $dat->date }}">{{ $dat->date }}</option>
+                            @endforeach
                         </select>
                     </div>
                     <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
@@ -111,12 +107,18 @@
 
             <div class="mb-4">
                 <label for="guests" class="block text-sm font-medium text-gray-700">Number of Guests</label>
-                <input type="number" id="guests" name="guests" class="form-input">
+                <input type="number" min="0" max="{{ $capacity->banquet_capacity }}" id="guests"
+                    name="guests" class="form-input">
             </div>
-            <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg" type="submit">Submit
+
+
+            <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg"
+                type="submit">Continue with Payment
             </button>
         </form>
     </div>
+
+
 </body>
 
 </html>

@@ -15,12 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('firstname');
             $table->string('lastname');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('phone');
             $table->string('orderedDate');
             $table->string('guestsNumber');
             $table->unsignedBigInteger('fk_user_id');
             $table->foreign('fk_user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('fk_banquet_id');
+            $table->foreign('fk_banquet_id')->references('id')->on('banquet_registers');
+            $table->string('paymentstatus');
+            $table->boolean('isCompleted');
             $table->timestamps();
         });
     }

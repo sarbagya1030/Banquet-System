@@ -23,7 +23,8 @@ Route::get('/login',[CustomAuthenticationController::class,'login']) -> middlewa
 Route::get('/registration',[CustomAuthenticationController::class,'registration'])-> middleware('alreadyLoggedIn');
 Route::post('/register-user',[CustomAuthenticationController::class,'registerUser'])->name('register-user');
 Route::post('/login-user',[CustomAuthenticationController::class,'loginUser'])->name('login-user');
-Route::get('/dashboard',[CustomAuthenticationController::class,'dash']) -> middleware('isLoggedIn');
+Route::get('/dashboard',[CustomAuthenticationController::class,'dash']) -> middleware('isLoggedIn')->name('dashboard');
+Route::post('/search',[upload_details::class,'searchPost'])->name('search');
 Route::get('/dashboardOwner',[CustomAuthenticationController::class,'dashOwner']) -> middleware('isLoggedIn') -> name('dashboardOwner');
 // Route::get('/dashboardOwner',[CustomAuthenticationController::class,'dashboard']) -> middleware('isLoggedIn');
 
@@ -63,3 +64,10 @@ Route::post('/password-reset', [CustomAuthenticationController::class, 'password
 Route::get('/booking/{id}',[upload_details::class,'booknow'])->name('booking');
 
 Route::post('/book-order/{id}',[upload_details::class,'bookingform'])->name('book-order');
+
+Route::get('/success/{id}',[upload_details::class,'successpay'])->name('success');
+Route::get('/fail/{id}',[upload_details::class,'failpay'])->name('fail');
+
+Route::get('/review/{id}',[upload_details::class,'rating'])->name('review');
+Route::post('/review-post/{id}',[upload_details::class,'reviewpost'])->name('review-post');
+

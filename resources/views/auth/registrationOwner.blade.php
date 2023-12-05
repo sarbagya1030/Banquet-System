@@ -109,6 +109,16 @@
                             </span>
                         </div>
 
+                        <div class="mt-5">
+                            <input type="number" placeholder="Bookingamount" name="bookingamount"
+                                value="{{ old('bookingamount') }}"
+                                class="border border-gray-400 py-1 px-2 w-full rounded-lg">
+                            <span class=" text-red-600">
+                                @error('bookingamount')
+                                    {{ $message }}
+                                @enderror
+                            </span>
+                        </div>
 
                         <div class="mt-5">
                             <input type="password" placeholder="Password" name="password"

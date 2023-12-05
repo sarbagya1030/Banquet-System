@@ -6,12 +6,17 @@ use App\Models\capacity;
 use App\Models\dates;
 use App\Models\menu;
 use App\Models\images;
+use App\Models\orders;
 use App\Models\User;
+use App\Models\booking;
+use App\Models\reviews;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
+
+use function PHPUnit\Framework\isNull;
 
 class upload_details extends Controller
 {
@@ -278,7 +283,10 @@ class upload_details extends Controller
 
 
     public function booknow($id) {
-        return view('booking',compact('id'));
+        $user = User::where('email',Session::get('loginEmail'))->first();
+        $capacity = capacity::where('fk_banquet_id',$id)->first();
+        $date = dates::where('fk_banquet_id',$id)->get();
+        return view('booking',compact('id','date','capacity','user'));
     }
 
 
@@ -293,28 +301,137 @@ class upload_details extends Controller
             'guests' => 'required',
 
         ]);
-
         $temp1= User::where('email','=',Session::get('loginEmail'))->first();
 
         $data = dates::where("fk_banquet_id",$id)->get();
         $capa = capacity::where('fk_banquet_id',$id)->first();
-        // return view ("booking",compact('temp1'));
+        $owner = banquetRegister::where('id',$id)->first();
 
+    
         if($temp1)
         {
-            $temp1->firstname = $request->firstname;
-            $temp1->lastname = $request->lastname;
-            $temp1->email = $request->email;
+            $owner = banquetRegister::where('id',$id)->first();
+            $temp1= User::where('email','=',Session::get('loginEmail'))->first();
+            $check = orders::where('orderedDate',$request->date)->first();
+            if(is_null($check)){
 
-            $temp1->save();
-
-
-                return back()->with('success','Your booking has been recorded');
-        }else{
-                return back()->with('fail','Something went wrong');
+                $value = new orders();
+                $value->firstname = $request->firstname;
+                $value->lastname = $request->lastname;
+                $value->email = $request->email;
+                $value->phone = $request->phone; 
+                $value->orderedDate = $request->date; 
+                $value->guestsNumber = $request->guests; 
+                $value->fk_user_id = $temp1->id; 
+                $value->fk_banquet_id = $owner->id; 
+                $value->paymentstatus = 'unpaid';
+                $value->isCompleted = 0;
+                $value->save();
+                foreach($data as $dt) {
+                    if($dt->date==$request->date) {
+                        $dt->delete();
+                    }
+                }
             }
 
 
-    }
+            $banquet = banquetRegister::where('id', $id)->first();
+            $userEmail = Session::get('loginEmail');
+            $productItems = [];
     
+                \Stripe\Stripe::setApiKey('sk_test_51O79rnGfKaSVwu78tNwb4dpWyqIUFhkZiAeFyMe8E9CsusswOeFxCyFgZOSr7ALIgzdWyerfHYTiKPC6hEelX5OD00Y54cxh0U');
+                $quantity = 1;
+                $price = intval($banquet->book_amount);
+                $productItems[] = [
+                    'price_data' => [
+                        'product_data' => [
+                            'name' => $banquet->banquetname,
+                        ],
+                        'currency' => 'NPR',
+                        'unit_amount' => $price . '00',
+                    ],
+                    'quantity' => $quantity
+                ];
+    
+                $checkoutSession = \Stripe\Checkout\Session::create([
+                    'line_items' => [$productItems],
+                    'mode' => 'payment',
+                    'customer_email' => $userEmail,
+                    'success_url' => url('/success/' . $value->id),
+                    'cancel_url' => url('/fail/', $value->id),
+                ]);
+                return redirect()->away($checkoutSession->url);
+        }else{
+                return back()->with('fail','Something went wrong');
+        }
+    }
+
+
+    public function successpay($id) {
+        $banquet = orders::where('id',$id)->first();
+        $banquet->paymentstatus = "Paid";
+        $banquet->save();
+        return redirect()->to(url('/booking/'.$banquet->fk_banquet_id))->with('success','Your booking has been recorded');
+    }
+
+    public function failpay($id) {
+        $banquet = orders::where('id',$id)->first();
+        $ban_id = $banquet->fk_banquet_id;
+        $delete = orders::where('id','=',$id)->first();
+        $delete->delete();
+            
+        return redirect()->to(url('/booking/'.$ban_id))->with('fail','Your Payment could not be made, try again later!!');
+    }
+
+
+    public function searchPost(Request $request)
+    {
+        $query = $request->input('search');
+
+        // Get the logged-in user's data (assuming this is what you intended)
+        $data = User::where('id', '=', Session::get('loginId'))->first();
+        $post = banquetRegister::all();
+        // Perform your search logic on the 'post' model
+        $results = banquetRegister::where('banquetname', 'like', '%' . $query . '%')
+            // ->orWhere('description', 'like', '%' . $query . '%')
+            // ->orWhere('name', 'like', '%' . $query . '%')
+            // Add more columns as needed
+            ->get();
+
+        // Fetch all posts 
+        return redirect()->to(url('/dashboard'))->with('results',$results);
+    }
+
+    public function rating($id) {
+        return view('review',compact('id'));
+    }
+
+    public function reviewpost(Request $request, $id) {
+        $banquet = banquetRegister::where('id',$id)->first();
+        
+        $review = new reviews();
+        $user = User::where('email',Session::get('loginEmail'))->first();
+        $review->fk_user_id = $user->id;
+        $review->fk_banquet_id = $id;
+        $review->rating = $request->rating;
+        $review->experience = $request->description;
+        $review->save();
+        $select = reviews::where('fk_banquet_id',$id)->get();
+
+        if($select){
+            $temp1 = count($select);
+            $temp = 0;
+            foreach($select as $sel){
+                $temp = $temp + $sel->rating;
+
+            }
+            $temp3 = $temp/$temp1;
+            $banquet->rating = round($temp3);
+            // dd($banquet);
+            $banquet->update();
+        }
+        return redirect()->to(url('/dashboard'));
+    }
+
+ 
 }

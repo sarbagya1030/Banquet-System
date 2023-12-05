@@ -35,52 +35,24 @@
         <h1 class="text-3xl font-semibold mb-4">Banquet Listings</h1>
 
         <div class="flex space-x-4 mb-6">
-            <!-- Location Dropdown -->
-            <div class="relative">
-                <select
-                    class="block appearance-none bg-white border border-gray-300 hover:border-gray-500 px-4 py-2 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                    <option value="">Select Location</option>
-                    <option value="location1">Location 1</option>
-                    <option value="location2">Location 2</option>
-                    <!-- Add more location options as needed -->
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                        <path d="M9 11V5a1 1 0 112 0v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H5a1 1 0 110-2h6z" />
-                    </svg>
-                </div>
-            </div>
-
-            <!-- Capacity Dropdown -->
-            <div class="relative">
-                <select
-                    class="block appearance-none bg-white border border-gray-300 hover:border-gray-500 px-4 py-2 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-                    <option value="">Select Capacity</option>
-                    <option value="capacity1">Capacity 1</option>
-                    <option value="capacity2">Capacity 2</option>
-                    <!-- Add more capacity options as needed -->
-                </select>
-                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                        <path d="M9 11V5a1 1 0 112 0v6h6a1 1 0 110 2h-6v6a1 1 0 11-2 0v-6H5a1 1 0 110-2h6z" />
-                    </svg>
-                </div>
-            </div>
-
             <!-- Search Button -->
-            <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg">
-                Search
-            </button>
+            <form action="{{ route('search') }}" method="POST">
+                @csrf
+                <input type="text" id="search" name="search">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg">
+                    Search
+                </button>
+            </form>
         </div>
+        @if (isset($results))
 
+            <!-- Banquet Cards (Sample Data) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Sample Banquet Card 1 -->
 
-        <!-- Banquet Cards (Sample Data) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Sample Banquet Card 1 -->
-            @if (!empty($data))
-                @foreach ($data as $dat)
+                @foreach ($results as $result)
                     @php
-                        $pic = images::where('fk_banquet_id', '=', $dat->id)->first();
+                        $pic = images::where('fk_banquet_id', '=', $result->id)->first();
                         // dd($pic->path);
                     @endphp
                     <div class="bg-white rounded shadow-md p-4">
@@ -91,12 +63,12 @@
                         @else
                             <img src="images/logo.png" alt="Placeholder Image" class="h-12 w-12">
                         @endif
-                        <h2 class="text-xl font-semibold">{{ $dat->banquetname }}</h2>
+                        <h2 class="text-xl font-semibold">{{ $result->banquetname }}</h2>
 
                         <!-- Rating Stars -->
                         <div class="flex items-center mt-2">
                             <span class="text-yellow-400">
-                                @php $rating = $dat->rating; @endphp
+                                @php $rating = $result->rating; @endphp
                                 @for ($i = 1; $i <= 5; $i++)
                                     @if ($rating >= $i)
                                         <i class="fas fa-star"></i>
@@ -105,38 +77,114 @@
                                     @endif
                                 @endfor
                             </span>
-                            <span class="ml-2">{{ $dat->rating }}</span>
+                            <span class="ml-2">{{ $result->rating }}</span>
                         </div>
 
                         <div class="mt-8">
                             <span class="text-blue-600">
                                 <i class="fas fa-envelope"></i>
                             </span>
-                            <a href="mailto:{{ $dat->email }}"
-                                class="text-blue-600 hover:underline">{{ $dat->email }}</a>
+                            <a href="mailto:{{ $result->email }}"
+                                class="text-blue-600 hover:underline">{{ $result->email }}</a>
                         </div>
                         <div class="mt-4">
                             <span class="text-green-600">
                                 <i class="fas fa-phone"></i>
                             </span>
-                            <a href="tel:{{ $dat->contactNumber }}"
-                                class="text-blue-600 hover:underline">{{ $dat->contactNumber }}</a>
+                            <a href="tel:{{ $result->contactNumber }}"
+                                class="text-blue-600 hover:underline">{{ $result->contactNumber }}</a>
                         </div>
                         <div class="mt-4">
                             <span class="text-red-600">
                                 <i class="fas fa-map-marker-alt"></i>
                             </span>
-                            <a href="{{ $dat->location }}"
-                                class="text-blue-600 hover:underline">{{ $dat->location }}</a>
+                            <a href="{{ $result->location }}"
+                                class="text-blue-600 hover:underline">{{ $result->location }}</a>
                         </div>
-                        <a href="{{ route('booking', $dat->id) }}"><button
-                                class="bg-blue-500 text-white hover:bg-blue-600 py-2 px-4 mt-2 rounded-full">Book
-                                Now</button></a>
+
+                        <div class="my-4">
+                            <a href="{{ route('booking', $result->id) }}"
+                                class="bg-blue-500 text-white hover:bg-blue-600 py-2 px-4 mt-2 rounded-full">
+                                Book
+                                Now</a>
+                        </div>
+
                     </div>
                 @endforeach
-            @endif
-        </div>
 
+            </div>
+        @else
+            <!-- Banquet Cards (Sample Data) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Sample Banquet Card 1 -->
+                @if (!empty($data))
+                    @foreach ($data as $dat)
+                        @php
+                            $pic = images::where('fk_banquet_id', '=', $dat->id)->first();
+                            // dd($pic->path);
+                        @endphp
+                        <div class="bg-white rounded shadow-md p-4">
+                            @if ($pic)
+                                <!-- Check if $pic is not null -->
+                                <img src="{{ asset('/banquet/' . $pic->path) }}" alt="Banquet Image" class="rounded-md"
+                                    style="height: 200px; width: 400px">
+                            @else
+                                <img src="images/logo.png" alt="Placeholder Image" class="h-12 w-12">
+                            @endif
+                            <h2 class="text-xl font-semibold">{{ $dat->banquetname }}</h2>
+
+                            <!-- Rating Stars -->
+                            <div class="flex items-center mt-2">
+                                <a href="{{ route('review', $dat->id) }}">
+                                    <span class="text-yellow-400">
+                                        @php $rating = $dat->rating; @endphp
+                                        @for ($i = 1; $i <= 5; $i++)
+                                            @if ($rating >= $i)
+                                                <i class="fas fa-star"></i>
+                                            @else
+                                                <i class="far fa-star"></i>
+                                            @endif
+                                        @endfor
+                                    </span>
+                                </a>
+                                <span class="ml-2">{{ $dat->rating }}</span>
+                            </div>
+
+
+                            <div class="mt-8">
+                                <span class="text-blue-600">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                                <a href="mailto:{{ $dat->email }}"
+                                    class="text-blue-600 hover:underline">{{ $dat->email }}</a>
+                            </div>
+                            <div class="mt-4">
+                                <span class="text-green-600">
+                                    <i class="fas fa-phone"></i>
+                                </span>
+                                <a href="tel:{{ $dat->contactNumber }}"
+                                    class="text-blue-600 hover:underline">{{ $dat->contactNumber }}</a>
+                            </div>
+                            <div class="mt-4">
+                                <span class="text-red-600">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </span>
+                                <a href="{{ $dat->location }}"
+                                    class="text-blue-600 hover:underline">{{ $dat->location }}</a>
+                            </div>
+
+                            <div class="my-4">
+                                <a href="{{ route('booking', $dat->id) }}"
+                                    class="bg-blue-500 text-white hover:bg-blue-600 py-2 px-4 mt-2 rounded-full">
+                                    Book
+                                    Now</a>
+                            </div>
+
+                        </div>
+                    @endforeach
+                @endif
+            </div>
+        @endif
     </div>
 
     {{-- Profile Dialogue Box --}}
@@ -177,8 +225,7 @@
             <button id="closeProfile" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
 

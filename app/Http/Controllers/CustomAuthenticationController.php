@@ -9,6 +9,7 @@ use App\Models\capacity;
 use App\Models\dates;
 use App\Models\images;
 use App\Models\menu;
+use App\Models\reviews;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File;

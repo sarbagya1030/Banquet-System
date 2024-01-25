@@ -15,7 +15,7 @@
     <!-- Navigation Bar -->
     <div class="p-4 text-white" style="background-image: linear-gradient(115deg, #00294A,#0F0E12);">
         <div class="container mx-auto flex justify-between items-center">
-            <div><img src="images/logo.png" class="h-12 w-12" alt="logo"></div>
+            <div><img src="{{ asset('images/logo.png') }}" class="h-12 w-12" alt="logo"></div>
             <ul class="flex space-x-4">
                 <li><a href="{{ route('dashboardOwner') }}" class="hover:underline">Home</a></li>
                 <li><a href="#" id="profile-link" class="hover:underline">Profile</a></li>
@@ -75,8 +75,7 @@
                     <a href="create-record" class="w-10 h-10 flex items-center justify-center rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" style="width:2.5rem; height:2.5rem">
-                            <circle cx="12" cy="12" r="10" fill="none"
-                                stroke-dasharray="4 4" />
+                            <circle cx="12" cy="12" r="10" fill="none" stroke-dasharray="4 4" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4">
                             </path>
                         </svg>

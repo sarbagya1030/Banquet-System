@@ -1,5 +1,7 @@
 @php
     use App\Models\images;
+    use App\Models\User;
+    use App\Models\reviews;
 @endphp
 
 
@@ -19,16 +21,14 @@
     <!-- Navigation Bar -->
     <div class="p-4 text-white" style="background-image: linear-gradient(115deg, #00294A,#0F0E12);">
         <div class="container mx-auto flex justify-between items-center">
-            <div><img src="images/logo.png" class="h-12 w-12" alt="logo"></div>
+            <div><img src="{{ asset('images/logo.png') }}" class="h-12 w-12" alt="logo"></div>
             <ul class="flex space-x-4">
-                <li><a href="dashboard" class="hover:underline">Home</a></li>
+                <li><a href="{{ route('dashboard') }}" class="hover:underline">Home</a></li>
                 <li><a href="#" id="openProfile" class="hover:underline">Profile</a></li>
                 <li><a href="logout" class="hover:underline">Logout</a></li>
             </ul>
         </div>
     </div>
-
-
 
 
     <div class="container mx-auto p-8">
@@ -48,12 +48,10 @@
 
             <!-- Banquet Cards (Sample Data) -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Sample Banquet Card 1 -->
 
                 @foreach ($results as $result)
                     @php
                         $pic = images::where('fk_banquet_id', '=', $result->id)->first();
-                        // dd($pic->path);
                     @endphp
                     <div class="bg-white rounded shadow-md p-4">
                         @if ($pic)
@@ -67,18 +65,52 @@
 
                         <!-- Rating Stars -->
                         <div class="flex items-center mt-2">
-                            <span class="text-yellow-400">
-                                @php $rating = $result->rating; @endphp
-                                @for ($i = 1; $i <= 5; $i++)
-                                    @if ($rating >= $i)
-                                        <i class="fas fa-star"></i>
-                                    @else
-                                        <i class="far fa-star"></i>
-                                    @endif
-                                @endfor
-                            </span>
+                            <a href="{{ route('review', $result->id) }}">
+                                <span class="text-yellow-400">
+                                    @php $rating = $result->rating; @endphp
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        @if ($rating >= $i)
+                                            <i class="fas fa-star"></i>
+                                        @else
+                                            <i class="far fa-star"></i>
+                                        @endif
+                                    @endfor
+                                </span>
+                            </a>
                             <span class="ml-2">{{ $result->rating }}</span>
                         </div>
+
+                        {{-- Review --}}
+                        {{-- <div class="hidden mt-6" id="reviewsSection">
+                            <div class="flex flex-wrap">
+                                @php
+                                    $reviews = reviews::where('fk_banquet_id', $dat->id)->get();
+
+                                @endphp
+                                @if (!$reviews->isEmpty())
+                                    @foreach ($reviews as $rev)
+                                        @php $user = User::where('id',$rev->fk_user_id)->first();@endphp
+                                        <!-- Review Card 1 -->
+                                        <div class="w-full h-28 px-3 py-2 border border-gray-300 rounded bg-gray-200">
+                                            <p class="text-gray-700 mb-4">{{ $rev->experience }}</p>
+                                            <p class="text-gray-500 text-right">
+                                                {{ $user->firstname . ' ' . $user->lastname }}
+                                            </p>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    <p>No Reviews.</p>
+                                @endif
+                            </div>
+                        </div> --}}
+
+                        <!-- See More Button -->
+                        <div class="mt-4">
+                            <a href="{{ route('show-reviews', $result->id) }}" class="text-blue-400 hover:underline">
+                                See Reviews
+                            </a>
+                        </div>
+
 
                         <div class="mt-8">
                             <span class="text-blue-600">
@@ -151,6 +183,40 @@
                             </div>
 
 
+                            {{-- Review
+                            <div class="hidden mt-6" id="reviewsSection">
+                                <div class="flex flex-wrap">
+                                    @php
+                                        $reviews = reviews::where('fk_banquet_id', $dat->id)->get();
+
+                                    @endphp
+                                    @if (!$reviews->isEmpty())
+                                        @foreach ($reviews as $rev)
+                                            @php $user = User::where('id',$rev->fk_user_id)->first();@endphp
+                                            <!-- Review Card 1 -->
+                                            <div
+                                                class="w-full h-28 px-3 py-2 border border-gray-300 rounded bg-gray-200">
+                                                <p class="text-gray-700 mb-4">{{ $rev->experience }}</p>
+                                                <p class="text-gray-500 text-right">
+                                                    -{{ $user->firstname . ' ' . $user->lastname }}
+                                                </p>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <p>No Reviews.</p>
+                                    @endif
+                                </div>
+                            </div> --}}
+
+
+                            <!-- See More Button -->
+                            <div class="mt-4">
+                                <a href="{{ route('show-reviews', $dat->id) }}" class="text-blue-400 hover:underline">
+                                    See Reviews
+                                </a>
+                            </div>
+
+
                             <div class="mt-8">
                                 <span class="text-blue-600">
                                     <i class="fas fa-envelope"></i>
@@ -186,6 +252,8 @@
             </div>
         @endif
     </div>
+
+
 
     {{-- Profile Dialogue Box --}}
     <div id="profileDialog"

@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 
 use function PHPUnit\Framework\isNull;
@@ -80,7 +81,7 @@ class upload_details extends Controller
 
         $res = $picture->save();
         if($res) {
-            return back()->with('success','You have added date successfully');
+            return back()->with('success','You have added image successfully');
         }else{
             return back()->with('fail','Something went wrong');
         }
@@ -368,9 +369,16 @@ class upload_details extends Controller
 
 
     public function successpay($id) {
+
         $banquet = orders::where('id',$id)->first();
         $banquet->paymentstatus = "Paid";
         $banquet->save();
+        $banquetEm = banquetRegister::where('id',$banquet->fk_banquet_id)->first();
+        $banquetEmail = $banquetEm->email;
+        Mail::send('displayBooking', ['id' => $id], function ($message) use ($banquetEmail) {
+            $message->to($banquetEmail);
+            $message->subject('New Booking Request');
+        });
         return redirect()->to(url('/booking/'.$banquet->fk_banquet_id))->with('success','Your booking has been recorded');
     }
 
@@ -431,6 +439,11 @@ class upload_details extends Controller
             $banquet->update();
         }
         return redirect()->to(url('/dashboard'));
+    }
+
+    public function reviewshow($id) {
+        $reviews = reviews::where('fk_banquet_id', $id)->get();
+        return view('showreview',compact('reviews'));
     }
 
  

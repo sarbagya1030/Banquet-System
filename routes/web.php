@@ -71,3 +71,4 @@ Route::get('/fail/{id}',[upload_details::class,'failpay'])->name('fail');
 Route::get('/review/{id}',[upload_details::class,'rating'])->name('review');
 Route::post('/review-post/{id}',[upload_details::class,'reviewpost'])->name('review-post');
 
+Route::get('/show-reviews/{id}',[upload_details::class,'reviewshow'])->name('show-reviews');

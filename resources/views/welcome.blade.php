@@ -16,7 +16,7 @@
     <!-- Navigation Bar -->
     <div class="p-4 text-white">
         <div class="container mx-auto flex justify-between items-center ">
-            <div><img src="images/logo.png" class="h-12 w-12" alt="logo"></div>
+            <div><img src="{{ asset('images/logo.png') }}" class="h-12 w-12" alt="logo"></div>
             <ul class="flex space-x-4">
                 <li><a href="#" id="about-us-link" class="hover:underline">About Us</a></li>
                 <li><a href="#" id="contact-us-link" class="hover:underline">Contact</a></li>

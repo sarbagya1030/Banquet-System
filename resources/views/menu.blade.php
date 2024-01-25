@@ -14,7 +14,7 @@
     <!-- Navigation Bar -->
     <div class="p-4 text-white" style="background-image: linear-gradient(115deg, #00294A,#0F0E12);">
         <div class="container mx-auto flex justify-between items-center">
-            <div><img src="images/logo.png" class="h-12 w-12" alt="logo"></div>
+            <div><img src="{{ asset('images/logo.png') }}" class="h-12 w-12" alt="logo"></div>
             <ul class="flex space-x-4">
                 <li><a href="{{ route('dashboardOwner') }}" class="hover:underline">Home</a></li>
                 <li><a href="#" id="profile-link" class="hover:underline">Profile</a></li>
